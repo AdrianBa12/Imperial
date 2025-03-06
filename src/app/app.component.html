@@ -7,12 +7,12 @@
       <img
         src="https://res.cloudinary.com/dd6ferfis/image/upload/v1728702908/LogoImperial_rtgf6p.png"
         alt="Logo"
-        style="width: 5rem"
+        style="width: 10rem"
       />
     </a>
     <div class="d-flex flex-column justify-content-center">
-      <span>Trusted by</span>
-      <span class="font-weight-bold">5 Core+travels</span>
+      <span>Garantia</span>
+      <span class="font-weight-bold">+10 000 viajes</span>
     </div>
     <button
       class="navbar-toggler"
@@ -26,43 +26,43 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/search']"
+            ><i class="icon bi bi-bus"></i>Inicio</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/search']"
+            ><i class="icon bi bi-train"></i>Contactanos</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/search']"
+            ><i class="icon bi bi-airplane"></i>Ofertas</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/search']"
             ><i class="icon bi bi-bus"></i>Buses</a
           >
         </li>
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/search']"
-            ><i class="icon bi bi-train"></i>Trains</a
+            ><i class="icon bi bi-ticket-perforated"></i>Seguimiento</a
           >
         </li>
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/search']"
-            ><i class="icon bi bi-airplane"></i>Flights</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/search']"
-            ><i class="icon bi bi-bus"></i>Buses</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/search']"
-            ><i class="icon bi bi-ticket-perforated"></i>Track Ticket</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/search']"
-            ><i class="icon bi bi-headset"></i>Need Help?</a
+            ><i class="icon bi bi-headset"></i>Ayuda?</a
           >
         </li>
         @if (loggedUserData) { @if (loggedUserData.role === 'Vendor') {
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/schedule']"
-            ><i class="icon bi bi-headset"></i>Bus Schedule</a
+            ><i class="icon bi bi-headset"></i>horario de autobuses</a
           >
         </li>
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/bookings']"
-            ><i class="icon bi bi-headset"></i>Bookings</a
+            ><i class="icon bi bi-headset"></i>Reservas</a
           >
         </li>
 
@@ -74,7 +74,7 @@
         </li>
         <li class="nav-item">
           <a class="nav-link text-danger" (click)="logoff()"
-            ><i class="icon bi bi-person"></i>LogOff</a
+            ><i class="icon bi bi-person"></i>Cerrar Sesion</a
           >
         </li>
 
@@ -82,7 +82,7 @@
 
         <li class="nav-item">
           <a class="nav-link text-danger" (click)="openModel()"
-            ><i class="icon bi bi-person"></i> Login/SignUp</a
+            ><i class="icon bi bi-person"></i> Iniciar Sesion/Crear cuenta</a
           >
         </li>
 
@@ -98,18 +98,13 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Modal Heading</h4>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-        ></button>
-      </div>
+      
 
       <!-- Modal body -->
       <div class="modal-body">
         @if(isLoginForm){
+
+          <h4 class="modal-title mb-4">Iniciar Sesion</h4>
 
         <form>
           <!-- Email input -->
@@ -121,7 +116,7 @@
               id="form2Example1"
               class="form-control"
             />
-            <label class="form-label" for="form2Example1">Email address</label>
+            <label class="form-label" for="form2Example1">Email</label>
           </div>
 
           <!-- Password input -->
@@ -133,7 +128,7 @@
               id="form2Example2"
               class="form-control"
             />
-            <label class="form-label" for="form2Example2">Password</label>
+            <label class="form-label" for="form2Example2">Contraseña</label>
           </div>
 
           <!-- 2 column grid layout for inline styling -->
@@ -149,7 +144,7 @@
                   checked
                 />
                 <label class="form-check-label" for="form2Example31">
-                  Remember me
+                  Recordar 
                 </label>
               </div>
             </div>
@@ -162,16 +157,17 @@
             data-mdb-ripple-init
             class="btn btn-primary btn-block mb-4"
           >
-            Sign in
+            Iniciar Sesion
           </button>
 
           <!-- Register buttons -->
           <div class="text-center">
-            <p>Not a member? <a (click)="isLoginForm = false">Register</a></p>
+            <p>No eres miembro? <a class="text-danger" (click)="isLoginForm = false">Registrate</a></p>
           </div>
         </form>
 
         }@else {
+          <h4 class="modal-title mb-4">Crear cuenta</h4>
         <form>
           <!-- Email input -->
           <div data-mdb-input-init class="form-outline mb-4">
@@ -182,7 +178,7 @@
               [(ngModel)]="registerObj.emailId"
               class="form-control"
             />
-            <label class="form-label" for="form2Example1">Email address</label>
+            <label class="form-label" for="form2Example1">Email </label>
           </div>
 
           <div data-mdb-input-init class="form-outline mb-4">
@@ -192,7 +188,7 @@
               [(ngModel)]="registerObj.userName"
               class="form-control"
             />
-            <label class="form-label" for="form2Example1">User Name</label>
+            <label class="form-label" for="form2Example1">Nombre de usuario</label>
           </div>
 
           <div data-mdb-input-init class="form-outline mb-4">
@@ -202,7 +198,7 @@
               [(ngModel)]="registerObj.fullName"
               class="form-control"
             />
-            <label class="form-label" for="form2Example1">Full name</label>
+            <label class="form-label" for="form2Example1">Nombre Completo</label>
           </div>
 
           <!-- Password input -->
@@ -213,7 +209,7 @@
               [(ngModel)]="registerObj.password"
               class="form-control"
             />
-            <label class="form-label" for="form2Example2">Password</label>
+            <label class="form-label" for="form2Example2">Contraseña</label>
           </div>
 
           <!-- Submit button -->
@@ -224,7 +220,7 @@
             data-mdb-ripple-init
             class="btn btn-primary btn-block mb-4"
           >
-            Register
+            Crear cuenta
           </button>
 
           <button
@@ -234,12 +230,12 @@
             data-mdb-ripple-init
             class="btn btn-primary btn-block mb-4"
           >
-            Register As Vendor
+            Registrar Proveedor
           </button>
 
           <!-- Register buttons -->
           <div class="text-center">
-            <p>Allready a member? <a (click)="isLoginForm = true">Login</a></p>
+            <p>Ya eres miembro? <a class="text-danger" (click)="isLoginForm = true">Iniciar Sesion</a></p>
           </div>
         </form>
 
@@ -254,7 +250,7 @@
           data-bs-dismiss="modal"
           (click)="closeModel()"
         >
-          Close
+          Cerrar
         </button>
       </div>
     </div>
