@@ -1,0 +1,58 @@
+<h2>Buscar Buses</h2>
+<div>
+  <label>Origen:</label>
+  <input [(ngModel)]="origen" placeholder="Buscar Origen" />
+</div>
+<div>
+  <label>Destino:</label>
+  <input [(ngModel)]="destino" placeholder="Buscar Destino" />
+</div>
+<div>
+  <label>Fecha de Ida:</label>
+  <input type="date" [(ngModel)]="fechaIda" />
+</div>
+<div>
+  <label>Fecha de Regreso (Opcional):</label>
+  <input type="date" [(ngModel)]="fechaRegreso" />
+</div>
+<button (click)="buscarBuses()">Buscar</button>
+
+<h3>Buses de Ida</h3>
+<ul>
+  <li *ngFor="let bus of busesIda" (click)="verAsientos(bus)">
+    <p>Autobús {{ bus.busNumber }}</p>
+    <p>Origen: {{ bus.origen }}</p>
+    <p>Destino: {{ bus.destino }}</p>
+    <p>Fecha: {{ bus.date | date }}</p>
+    <p>Horario: {{ bus.horarioViaje }}</p>
+    <p>Precio: {{ bus.precio | currency }}</p>
+    <p>Duración: {{ bus.duracionViaje }}</p>
+  </li>
+</ul>
+
+<h3>Buses de Regreso</h3>
+<ul>
+  <li *ngFor="let bus of busesRegreso" (click)="verAsientos(bus)">
+    <p>Autobús {{ bus.busNumber }}</p>
+    <p>Origen: {{ bus.origen }}</p>
+    <p>Destino: {{ bus.destino }}</p>
+    <p>Fecha: {{ bus.date | date }}</p>
+    <p>Horario: {{ bus.horarioViaje }}</p>
+    <p>Precio: {{ bus.precio | currency }}</p>
+    <p>Duración: {{ bus.duracionViaje }}</p>
+  </li>
+</ul>
+
+<div *ngIf="selectedBus">
+  <h3>Asientos del Autobús {{ selectedBus.busNumber }}</h3>
+  <div class="seat-grid">
+    <div
+      *ngFor="let seat of seats"
+      class="seat"
+      [class.booked]="seat.isBooked"
+      (click)="reservarAsiento(seat.seatId)"
+    >
+      {{ seat.seatNumber }}
+    </div>
+  </div>
+</div>

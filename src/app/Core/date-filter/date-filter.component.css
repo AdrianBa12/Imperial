@@ -1,0 +1,17 @@
+.seat-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 10px;
+}
+
+.seat {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+  cursor: pointer;
+}
+
+.seat.booked {
+  background-color: #ffcccc;
+  cursor: not-allowed;
+}

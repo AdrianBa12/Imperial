@@ -1,0 +1,167 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-12 text-end">
+      <button class="btn btn-success" (click)="isFormView = !isFormView">
+        {{ isFormView ? "List View" : "Create New schedule" }}
+      </button>
+    </div>
+  </div>
+  <!-- Bus Schedule Form -->
+  @if (isFormView) {
+  <div class="card">
+    <div class="card-header bg-primary text-white">Bus Schedule Form</div>
+    <div class="card-body">
+      <div id="scheduleForm">
+        <div class="row">
+          <div class="col-3">
+            <div class="mb-3">
+              <label for="busName" class="form-label">Bus Name</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="scheduleObj.busName"
+                placeholder="Enter bus name"
+              />
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="mb-3">
+              <label for="busVehicleNo" class="form-label"
+                >Bus Vehicle No</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="scheduleObj.busVehicleNo"
+                placeholder="Enter bus vehicle number"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-3">
+            <label for="fromLocation" class="form-label">From Location</label>
+            <select
+              class="form-control"
+              [(ngModel)]="scheduleObj.fromLocation"
+              id="fromLocation"
+            >
+              <option value="">Select Location</option>
+              <!-- From Location options -->
+              @for (item of locationList; track $index) {
+              <option [value]="item.locationId">{{ item.locationName }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-3">
+            <label for="fromLocation" class="form-label">to Location</label>
+            <select class="form-control" [(ngModel)]="scheduleObj.toLocation">
+              <option value="">Select Location</option>
+              <!-- From Location options -->
+              @for (item of locationList; track $index) {
+              <option [value]="item.locationId">{{ item.locationName }}</option>
+              }
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-3">
+            <label for="departureTime" class="form-label">Departure Time</label>
+            <input
+              type="datetime-local"
+              class="form-control"
+              [(ngModel)]="scheduleObj.departureTime"
+              id="departureTime"
+            />
+          </div>
+          <div class="col-3">
+            <label for="arrivalTime" class="form-label">Arrival Time</label>
+            <input
+              type="datetime-local"
+              class="form-control"
+              [(ngModel)]="scheduleObj.arrivalTime"
+              id="arrivalTime"
+            />
+          </div>
+          <div class="col-3">
+            <label for="scheduleDate" class="form-label">Schedule Date</label>
+            <input
+              type="date"
+              class="form-control"
+              [(ngModel)]="scheduleObj.scheduleDate"
+              id="scheduleDate"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-3">
+            <label for="price" class="form-label">Price</label>
+            <input
+              type="number"
+              class="form-control"
+              [(ngModel)]="scheduleObj.price"
+              id="price"
+              placeholder="Enter price"
+            />
+          </div>
+          <div class="col-3">
+            <label for="totalSeats" class="form-label">Total Seats</label>
+            <input
+              type="number"
+              class="form-control"
+              [(ngModel)]="scheduleObj.totalSeats"
+              id="totalSeats"
+              placeholder="Enter total seats"
+            />
+          </div>
+        </div>
+
+        <button type="button" (click)="onSave()" class="btn btn-success">
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+
+  } @else {
+  <div class="card">
+    <div class="card-header bg-secondary text-white">Bus Schedule List</div>
+    <div class="card-body">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Sr No</th>
+            <th>Bus Name</th>
+            <th>From Location</th>
+            <th>To Location</th>
+            <th>Departure Time</th>
+            <th>Arrival Time</th>
+            <th>Schedule Date</th>
+            <th>Price</th>
+            <th>Total Seats</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="scheduleList">
+          @for (item of scheduleList$ |async; track $index) {
+          <tr>
+            <td>{{ $index + 1 }}</td>
+            <td>{{ item.busName }}</td>
+            <td>{{ item.fromLocationName }}</td>
+            <td>{{ item.toLocationName }}</td>
+            <td>{{ item.departureTime | date : "HH:mm" }}</td>
+            <td>{{ item.arrivalTime | date : "HH:mm" }}</td>
+            <td>{{ item.scheduleDate | date : "dd-MMM-yy" }}</td>
+            <td>{{ item.price }}</td>
+            <td>{{ item.departureTime }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  }
+
+  <!-- Bus Schedule List Table -->
+</div>

@@ -1,0 +1,39 @@
+<div class="container mt-5">
+  <h2 class="mb-4">Booking Details</h2>
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Sr No</th>
+        <th>Bus Name</th>
+        <th>Bus Vehicle No</th>
+        <th>Travel Date</th>
+        <th>Customer Name</th>
+        <th>Email ID</th>
+
+        <th>Seat Numbers</th>
+        <th>Vendor ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of bookingList(); track $index) {
+      <tr>
+        <td>{{ $index + 1 }}</td>
+        <td>{{ item.busName }}</td>
+        <td>{{ item.busVehicleNo }}</td>
+        <td>{{ item.travelDate | date : "dd-MMM-yyyy" }}</td>
+        <td>{{ item.customerName }}</td>
+        <td>{{ item.emailId }}</td>
+        <td>{{ item.busName }}</td>
+
+        <td>
+          <ul class="list-unstyled mb-0">
+            @for (seatno of item.seatNos; track $index) {
+            <li>{{ seatno }}</li>
+            }
+          </ul>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
