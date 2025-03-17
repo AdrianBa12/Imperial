@@ -6,12 +6,16 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class MasterService {
-  apiURL: string = 'https://projectapi.gerasim.in/api/BusBooking/';
+  // apiURL: string = 'https://projectapi.gerasim.in/api/BusBooking/';
+  apiURL: string = 'http://localhost:1337/api/';
 
   constructor(private http: HttpClient) {}
 
+  // getLocations(): Observable<any[]> {
+  //   return this.http.get<any[]>(this.apiURL + 'GetBusLocations');
+  // }
   getLocations(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiURL + 'GetBusLocations');
+    return this.http.get<any>(this.apiURL + 'locations');
   }
 
   searchBus(from: number, to: number, travelDate: string): Observable<any[]> {
