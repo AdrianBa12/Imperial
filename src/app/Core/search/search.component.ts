@@ -7,29 +7,27 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 // Define interfaces para los datos
-interface Location {
+interface IProvincia {
   id: number;
 
-  locationName: string;
+  nombreProvincia: string;
   code: string;
 
 }
 
-interface Bus {
+interface IHorarioAutobus {
   id : number
-  availableSeats: number
-  totalSeats: number
-  price: number
-  arrivalTime: string
+  asientosDisponibles: number
+  totalDeAsiento: number
+  precio: number
+  fechaDeLlegada: string
+  fechaDeSalida: string
   scheduleId: number
-  departureTime: string
-  busName: string
-  busVehicleNo: string
-  fromLocationName: string
-  toLocationName: string
-  vendorName: string
-  scheduleDate: string
-  vendorId: number
+  nombreDeBus: string
+  numeroPLacaBus: string
+  terminalSalidaId: string
+  terminalLlegadaId: string
+ 
   
 }
 
@@ -40,9 +38,9 @@ interface Bus {
   styleUrl: './search.component.css',
 })
 export class SearchComponent implements OnInit {
-  locations$: Observable<Location[]> = new Observable<Location[]>();
+  locations$: Observable<IProvincia[]> = new Observable<IProvincia[]>();
   masterSrv = inject(MasterService);
-  busList: Bus[] = [];
+  busList: IHorarioAutobus[] = [];
 
   searchObj: any = {
     fromLocation: '',
@@ -55,7 +53,7 @@ export class SearchComponent implements OnInit {
   }
 
   getAllLocations() {
-    this.locations$ = this.masterSrv.getLocations().pipe(
+    this.locations$ = this.masterSrv.getProvincias().pipe(
       map((response: any) => response.data) // Extrae el array de locations de la respuesta
     );
   }

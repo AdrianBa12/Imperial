@@ -14,7 +14,7 @@
               <select class="form-select" name="fromLocation" [(ngModel)]="searchObj.fromLocation">
                 <option>Provincia de salida</option>
                 @for (item of locations$ | async; track $index) {
-                <option [value]="item.id">{{ item.locationName }}</option>
+                <option [value]="item.id">{{ item.nombreProvincia }}</option>
                 }
               </select>
             </div>
@@ -28,7 +28,7 @@
               <select class="form-select" name="toLocation" [(ngModel)]="searchObj.toLocation">
                 <option>Provincia de llegada</option>
                 @for (item of locations$ | async; track $index) {
-                <option [value]="item.id">{{ item.locationName }}</option>
+                <option [value]="item.id">{{ item.nombreProvincia }}</option>
                 }
               </select>
             </div>
@@ -58,13 +58,13 @@
         <div class="card mb-3">
           <div class="row g-0">
             <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
-              <h5 class="card-title">{{ item.busName }}</h5>
-              <p class="card-text">{{ item.vendorName }}</p>
+              <h5 class="card-title">{{ item.nombreDeBus }}</h5>
+              <!-- <p class="card-text">{{ item.vendorName }}</p> -->
             </div>
             <div class="col-md-9">
               <div class="card-body row">
                 <div class="col-md-2">
-                  <p class="card-text"><strong>{{ item.departureTime | date : "hh:mm:ss" }}</strong></p>
+                  <p class="card-text"><strong>{{ item.fechaDeSalida | date : "hh:mm:ss" }}</strong></p>
                   <p class="card-text">Partida</p>
                 </div>
                 <div class="col-md-2">
@@ -72,17 +72,17 @@
                   <p class="card-text">Duracion</p>
                 </div>
                 <div class="col-md-2">
-                  <p class="card-text"><strong>{{ item.arrivalTime | date : "hh:mm:ss" }}</strong></p>
+                  <p class="card-text"><strong>{{ item.fechaDeLlegada | date : "hh:mm:ss" }}</strong></p>
                   <p class="card-text">Llegada</p>
-                  <p class="text-danger">{{ item.arrivalTime | date : "dd:MM:yyyy" }}</p>
+                  <p class="text-danger">{{ item.fechaDeLlegada | date : "dd:MM:yyyy" }}</p>
                 </div>
                 <div class="col-md-2">
                   <p class="card-text"><strong>4.5</strong> ⭐</p>
                   <p class="card-text">567 Comentarios</p>
                 </div>
                 <div class="col-md-2">
-                  <p class="card-text"><strong>PEN {{ item.price }}</strong></p>
-                  <p class="card-text">{{ item.availableSeats }} Asientos disponibles <br> de {{ item.totalSeats }}</p>
+                  <p class="card-text"><strong>PEN {{ item.precio }}</strong></p>
+                  <p class="card-text">{{ item.asientosDisponibles }} Asientos disponibles <br> de {{ item.totalDeAsiento }}</p>
                 </div>
                 <div class="col-md-2 text-end">
                   <button class="btn btn-danger" [routerLink]="['/booking/', item.id]" routerLinkActive="router-link-active">

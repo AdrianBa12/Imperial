@@ -14,10 +14,15 @@ export class MasterService {
   // getLocations(): Observable<any[]> {
   //   return this.http.get<any[]>(this.apiURL + 'GetBusLocations');
   // }
-  getLocations(): Observable<any[]> {
-    return this.http.get<any>(this.apiURL + 'locations');
+  getProvincias(): Observable<any[]> {
+    return this.http.get<any>(this.apiURL + 'provincias');
   }
 
+  // searchBus(from: number, to: number, travelDate: string): Observable<any[]> {
+  //   return this.http.get<any[]>(
+  //     `${this.apiURL}searchBus?fromLocation=${from}&toLocation=${to}&travelDate=${travelDate}`
+  //   );
+  // }
   searchBus(from: number, to: number, travelDate: string): Observable<any[]> {
     return this.http.get<any[]>(
       `${this.apiURL}searchBus?fromLocation=${from}&toLocation=${to}&travelDate=${travelDate}`

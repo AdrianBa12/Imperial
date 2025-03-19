@@ -48,7 +48,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   loadLocations() {
-    this.masterSrv.getLocations().subscribe((res: any) => {
+    this.masterSrv.getProvincias().subscribe((res: any) => {
       this.locationList = res;
     });
   }
