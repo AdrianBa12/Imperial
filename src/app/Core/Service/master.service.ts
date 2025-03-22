@@ -24,9 +24,15 @@ export class MasterService {
   //   );
   // }
   searchBus(from: number, to: number, travelDate: string): Observable<any[]> {
-    return this.http.get<any[]>(
-      `${this.apiURL}searchBus?fromLocation=${from}&toLocation=${to}&travelDate=${travelDate}`
-    );
+    const params = {
+      'filters[terminalSalidaId][provinciaId][$in][0]': from,
+      'filters[terminalLlegadaId][provinciaId][$in][0]': to,
+      'filters[fechaDeSalida][$eq]': travelDate,
+      'populate[terminalSalidaId][populate][0]': 'provinciaId',
+      'populate[terminalLlegadaId][populate][0]': 'provinciaId',
+    };
+  
+    return this.http.get<any[]>(`${this.apiURL}horario-de-autobuses`, { params });
   }
 
   getScheduleById(id: number) {
