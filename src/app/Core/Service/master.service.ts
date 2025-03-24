@@ -35,10 +35,10 @@ export class MasterService {
     return this.http.get<any[]>(`${this.apiURL}horario-de-autobuses`, { params });
   }
 
-  getScheduleById(id: number) {
-    return this.http.get<any[]>(this.apiURL + 'GetBusScheduleById?id=' + id);
+  getScheduleById(documentId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiURL}horario-de-autobuses/${documentId}?populate=*`);
   }
-
+  
   getAllBusBookings(id: number) {
     return this.http.get<any[]>(
       this.apiURL + 'GetAllBusBookings?vendorId=' + id

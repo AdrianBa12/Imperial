@@ -15,6 +15,7 @@ interface IProvincia {
 }
 
 interface IHorarioAutobus {
+  documentId: string;
   id: number;
   asientosDisponibles: number;
   totalDeAsiento: number;
@@ -72,6 +73,7 @@ export class SearchComponent implements OnInit {
       .subscribe({
         next: (res: any) => {
           this.busList = res.data.map((item: any) => ({
+            documentId: item.documentId, 
             id: item.id,
             asientosDisponibles: item.asientosDisponibles,
             totalDeAsiento: item.totalDeAsiento,

@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './booking.component.css',
 })
 export class BookingComponent {
-  scheduleId: number = 0;
+  scheduleId: string = '';
   scheduleData: any;
 
   seatArray: number[] = [];
@@ -25,24 +25,26 @@ export class BookingComponent {
     this.activedRoute.params.subscribe((res: any) => {
       this.scheduleId = res.id;
       this.getScheduleDetailsById();
-      this.getBookedSeats();
+      // this.getBookedSeats();
     });
   }
 
   getScheduleDetailsById() {
     this.masterSrv.getScheduleById(this.scheduleId).subscribe((res: any) => {
-      this.scheduleData = res;
-      for (let index = 1; index <= this.scheduleData.totalSeats; index++) {
+      this.scheduleData = res.data;
+      // Reiniciamos el array de asientos para evitar duplicados
+      this.seatArray = [];
+      for (let index = 1; index <= this.scheduleData.totalDeAsiento; index++) {
         this.seatArray.push(index);
       }
     });
   }
 
-  getBookedSeats() {
-    this.masterSrv.getBookedSeats(this.scheduleId).subscribe((res: any) => {
-      this.bookedSeatsArray = res;
-    });
-  }
+  // getBookedSeats() {
+  //   this.masterSrv.getBookedSeats(this.scheduleId).subscribe((res: any) => {
+  //     this.bookedSeatsArray = res;
+  //   });
+  // }
 
   checkIfSeatBooked(seatNo: number) {
     return this.bookedSeatsArray.indexOf(seatNo);
@@ -73,7 +75,7 @@ export class BookingComponent {
         bookingId: 0,
         custId: loggData.userId,
         bookingDate: new Date(),
-        scheduleId: this.scheduleId,
+        scheduleId: this.scheduleId, // Aquí ya estamos usando documentId
         BusBookingPassengers: this.userSelectedSeatArray,
       };
       this.masterSrv.onBooking(obj).subscribe(

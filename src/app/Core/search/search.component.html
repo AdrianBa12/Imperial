@@ -103,7 +103,7 @@
                   <p class="card-text">{{ item.asientosDisponibles }} Asientos disponibles <br> de {{ item.totalDeAsiento }}</p>
                 </div>
                 <div class="col-md-2 text-end">
-                  <button class="btn btn-danger" [routerLink]="['/booking/', item.id]" routerLinkActive="router-link-active">
+                  <button class="btn btn-danger" [routerLink]="['/booking/', item.documentId]" routerLinkActive="router-link-active">
                     Reservar
                   </button>
                 </div>
