@@ -51,20 +51,32 @@ export class BookingComponent {
   }
 
   selectSeat(seatNo: number) {
-    const obj = {
-      passengerId: 0,
-      bookingId: 0,
-      passengerName: '',
-      age: 0,
-      gender: '',
-      seatNo: 0,
-    };
-    obj.seatNo = seatNo;
-    this.userSelectedSeatArray.push(obj);
+    // Primero verificar si el asiento ya está seleccionado
+    const existingIndex = this.userSelectedSeatArray.findIndex(item => item.seatNo === seatNo);
+    
+    if (existingIndex === -1) {
+      // Si no existe, agregar nuevo asiento
+      const obj = {
+        passengerId: 0,
+        bookingId: 0,
+        passengerName: '',
+        age: 0,
+        gender: '',
+        seatNo: seatNo,
+      };
+      this.userSelectedSeatArray.push(obj);
+    } else {
+      // Si ya existe, puedes:
+      // 1. Eliminarlo (para deseleccionar)
+      this.userSelectedSeatArray.splice(existingIndex, 1);
+      
+      // O 2. Mostrar un mensaje (alternativa)
+      // alert('Este asiento ya está seleccionado');
+    }
   }
 
   checkIsSeatSelected(seatNo: number) {
-    return this.userSelectedSeatArray.findIndex((m) => m.seatNo == seatNo);
+    return this.userSelectedSeatArray.findIndex((m) => m.seatNo === seatNo);
   }
 
   bookNow() {

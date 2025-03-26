@@ -6,24 +6,18 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class MasterService {
-  // apiURL: string = 'https://projectapi.gerasim.in/api/BusBooking/';
+
   apiURL: string = 'http://localhost:1337/api/';
   authURL: string = 'http://localhost:1337/api/auth/';
 
   constructor(private http: HttpClient) {}
 
-  // getLocations(): Observable<any[]> {
-  //   return this.http.get<any[]>(this.apiURL + 'GetBusLocations');
-  // }
+
   getProvincias(): Observable<any[]> {
     return this.http.get<any>(this.apiURL + 'provincias');
   }
 
-  // searchBus(from: number, to: number, travelDate: string): Observable<any[]> {
-  //   return this.http.get<any[]>(
-  //     `${this.apiURL}searchBus?fromLocation=${from}&toLocation=${to}&travelDate=${travelDate}`
-  //   );
-  // }
+
   searchBus(from: number, to: number, travelDate: string): Observable<any[]> {
     const params = {
       'filters[terminalSalidaId][provinciaId][$in][0]': from,
@@ -69,7 +63,7 @@ export class MasterService {
     // Enviar el objeto directamente, sin envolver en {data: ...}
     return this.http.post(`${this.apiURL}users`, userData);
   }
-  
+
   onBooking(obj: any) {
     return this.http.post<any[]>(this.apiURL + 'PostBusBooking', obj);
   }

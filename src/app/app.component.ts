@@ -66,37 +66,37 @@ export class AppComponent {
   }
 
   onRegister() {
-    // Asegurar que los nombres de campos coincidan
-    this.registerObj = {
-      userName: this.registerObj.userName,
-      emailId: this.registerObj.emailId,
-      password: this.registerObj.password,
-      fullName: this.registerObj.fullName
-    };
-  
-    this.masterSrv.onRegisterUser(this.registerObj).subscribe({
-      next: (res: any) => {
-        // La respuesta de Strapi tiene estructura diferente
-        const userData = {
-          userId: res.user?.id,
-          userName: res.user?.username,
-          emailId: res.user?.email,
-          fullName: res.user?.fullName || '',
-          role: '3',
-          jwt: res.jwt
-        };
-        
-        alert('Usuario registrado con éxito');
-        localStorage.setItem('redBusUser', JSON.stringify(userData));
-        this.loggedUserData = userData;
-        this.closeModel();
-      },
-      error: (error) => {
-        console.error('Error en registro:', error);
-        alert(`Error en registro: ${error.error?.error?.message || 'Error desconocido'}`);
-      }
-    });
-  }
+  // Asegurar que los nombres de campos coincidan
+  this.registerObj = {
+    userName: this.registerObj.userName,
+    emailId: this.registerObj.emailId,
+    password: this.registerObj.password,
+    fullName: this.registerObj.fullName
+  };
+
+  this.masterSrv.onRegisterUser(this.registerObj).subscribe({
+    next: (res: any) => {
+      // La respuesta de Strapi tiene estructura diferente
+      const userData = {
+        userId: res.user?.id,
+        userName: res.user?.username,
+        emailId: res.user?.email,
+        fullName: res.user?.fullName || '',
+        role: '3',
+        jwt: res.jwt
+      };
+      
+      alert('Usuario registrado con éxito');
+      localStorage.setItem('redBusUser', JSON.stringify(userData));
+      this.loggedUserData = userData;
+      this.closeModel();
+    },
+    error: (error) => {
+      console.error('Error en registro:', error);
+      alert(`Error en registro: ${error.error?.error?.message || 'Error desconocido'}`);
+    }
+  });
+}
 
   onLogin() {
     this.masterSrv.onLogin(this.loginObj).subscribe(
