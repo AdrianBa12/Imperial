@@ -56,6 +56,7 @@ export class MasterService {
     const userData = {
       username: obj.userName,  // Asegurar que coincide con el nombre en Strapi
       email: obj.emailId,      // Strapi espera 'email' no 'emailId'
+      fullName: obj.fullName,  // Asegurar que coincide con el nombre en Strapi
       password: obj.password,
       role: '3'                // Rol como string
     };
