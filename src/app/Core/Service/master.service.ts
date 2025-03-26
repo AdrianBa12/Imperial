@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 export class MasterService {
   // apiURL: string = 'https://projectapi.gerasim.in/api/BusBooking/';
   apiURL: string = 'http://localhost:1337/api/';
+  authURL: string = 'http://localhost:1337/api/auth/';
 
   constructor(private http: HttpClient) {}
 
@@ -57,10 +58,18 @@ export class MasterService {
     );
   }
 
-  onRegisterUser(obj: any) {
-    return this.http.post<any[]>(this.apiURL + 'AddNewUser', obj);
+  onRegisterUser(obj: any): Observable<any> {
+    const userData = {
+      username: obj.userName,  // Asegurar que coincide con el nombre en Strapi
+      email: obj.emailId,      // Strapi espera 'email' no 'emailId'
+      password: obj.password,
+      role: '3'                // Rol como string
+    };
+    
+    // Enviar el objeto directamente, sin envolver en {data: ...}
+    return this.http.post(`${this.apiURL}users`, userData);
   }
-
+  
   onBooking(obj: any) {
     return this.http.post<any[]>(this.apiURL + 'PostBusBooking', obj);
   }
@@ -70,7 +79,10 @@ export class MasterService {
   }
 
   onLogin(obj: any): Observable<any> {
-    return this.http.post(`${this.apiURL}/login`, obj);
+    return this.http.post(`${this.authURL}local`, {
+      identifier: obj.userName, // Puede ser email o username
+      password: obj.password
+    });
   }
 
   createSchedule(obj: any): Observable<any> {

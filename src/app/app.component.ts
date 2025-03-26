@@ -66,28 +66,57 @@ export class AppComponent {
   }
 
   onRegister() {
-    this.masterSrv.onRegisterUser(this.registerObj).subscribe(
-      (res: any) => {
-        alert('User Registed Success');
-        localStorage.setItem('redBusUser', JSON.stringify(res.data));
-        this.loggedUserData = res.data;
+    // Asegurar que los nombres de campos coincidan
+    this.registerObj = {
+      userName: this.registerObj.userName,
+      emailId: this.registerObj.emailId,
+      password: this.registerObj.password,
+      fullName: this.registerObj.fullName
+    };
+  
+    this.masterSrv.onRegisterUser(this.registerObj).subscribe({
+      next: (res: any) => {
+        // La respuesta de Strapi tiene estructura diferente
+        const userData = {
+          userId: res.user?.id,
+          userName: res.user?.username,
+          emailId: res.user?.email,
+          fullName: res.user?.fullName || '',
+          role: '3',
+          jwt: res.jwt
+        };
+        
+        alert('Usuario registrado con éxito');
+        localStorage.setItem('redBusUser', JSON.stringify(userData));
+        this.loggedUserData = userData;
         this.closeModel();
       },
-      (error) => {
-        alert(JSON.stringify(error));
+      error: (error) => {
+        console.error('Error en registro:', error);
+        alert(`Error en registro: ${error.error?.error?.message || 'Error desconocido'}`);
       }
-    );
+    });
   }
 
   onLogin() {
     this.masterSrv.onLogin(this.loginObj).subscribe(
       (res: any) => {
-        localStorage.setItem('redBusUser', JSON.stringify(res.data));
-        this.loggedUserData = res.data;
+        // Adaptamos la respuesta de Strapi a nuestra estructura esperada
+        const userData = {
+          userId: res.user.id,
+          userName: res.user.username,
+          emailId: res.user.email,
+          fullName: res.user.fullName,
+          role: '3', // Rol de cliente
+          jwt: res.jwt // Guardamos el token JWT
+        };
+        
+        localStorage.setItem('redBusUser', JSON.stringify(userData));
+        this.loggedUserData = userData;
         this.closeModel();
       },
       (error) => {
-        alert(JSON.stringify(error));
+        alert('Error de login: ' + error.message);
       }
     );
   }
