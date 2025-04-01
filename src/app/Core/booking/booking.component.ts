@@ -13,9 +13,7 @@ export class BookingComponent {
   scheduleId: string = '';
   scheduleData: any;
 
-  seatArray: number[] = [];
-  bookedSeatsArray: number[] = [];
-
+  seatMap: any[] = []; // Ahora usaremos el mapa de asientos completo
   userSelectedSeatArray: any[] = [];
 
   constructor(
@@ -25,33 +23,33 @@ export class BookingComponent {
     this.activedRoute.params.subscribe((res: any) => {
       this.scheduleId = res.id;
       this.getScheduleDetailsById();
-      // this.getBookedSeats();
     });
   }
 
   getScheduleDetailsById() {
     this.masterSrv.getScheduleById(this.scheduleId).subscribe((res: any) => {
       this.scheduleData = res.data;
-      // Reiniciamos el array de asientos para evitar duplicados
-      this.seatArray = [];
-      for (let index = 1; index <= this.scheduleData.totalDeAsiento; index++) {
-        this.seatArray.push(index);
-      }
+      this.seatMap = res.data.mapaDeAsientos;
     });
   }
 
-  // getBookedSeats() {
-  //   this.masterSrv.getBookedSeats(this.scheduleId).subscribe((res: any) => {
-  //     this.bookedSeatsArray = res;
-  //   });
-  // }
-
-  checkIfSeatBooked(seatNo: number) {
-    return this.bookedSeatsArray.indexOf(seatNo);
+  checkSeatStatus(seatNo: number) {
+    const seat = this.seatMap.find(s => s.number === seatNo);
+    if (!seat) return 'unknown';
+    
+    // Primero verificar si está seleccionado por el usuario
+    const isSelected = this.userSelectedSeatArray.some(item => item.seatNo === seatNo);
+    if (isSelected) return 'selected';
+    
+    // Luego verificar el estado original del asiento
+    return seat.estado; // 'disponible', 'ocupado', 'reservado'
   }
-
   selectSeat(seatNo: number) {
-    // Primero verificar si el asiento ya está seleccionado
+    const seat = this.seatMap.find(s => s.number === seatNo);
+    
+    // No permitir seleccionar asientos ocupados
+    if (seat?.estado === 'ocupado') return;
+    
     const existingIndex = this.userSelectedSeatArray.findIndex(item => item.seatNo === seatNo);
     
     if (existingIndex === -1) {
@@ -66,17 +64,9 @@ export class BookingComponent {
       };
       this.userSelectedSeatArray.push(obj);
     } else {
-      // Si ya existe, puedes:
-      // 1. Eliminarlo (para deseleccionar)
+      // Si ya existe, eliminarlo (deseleccionar)
       this.userSelectedSeatArray.splice(existingIndex, 1);
-      
-      // O 2. Mostrar un mensaje (alternativa)
-      // alert('Este asiento ya está seleccionado');
     }
-  }
-
-  checkIsSeatSelected(seatNo: number) {
-    return this.userSelectedSeatArray.findIndex((m) => m.seatNo === seatNo);
   }
 
   bookNow() {
@@ -87,19 +77,22 @@ export class BookingComponent {
         bookingId: 0,
         custId: loggData.userId,
         bookingDate: new Date(),
-        scheduleId: this.scheduleId, // Aquí ya estamos usando documentId
+        scheduleId: this.scheduleId,
         BusBookingPassengers: this.userSelectedSeatArray,
       };
       this.masterSrv.onBooking(obj).subscribe(
         (Res: any) => {
           alert('Booking Success');
+          // Actualizar el estado de los asientos después de la reserva
+          this.getScheduleDetailsById();
+          this.userSelectedSeatArray = [];
         },
         (error) => {
           alert('Booking failed');
         }
       );
     } else {
-      alert('Please Login ');
+      alert('Please Login');
     }
   }
 }

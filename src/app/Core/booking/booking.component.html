@@ -13,30 +13,37 @@
           </div>
         </div>
         <div class="row">
-          @for (seatNo of seatArray; track $index) { @if
-          (checkIfSeatBooked(seatNo)!= -1) {
-          <div class="col-3">
-            <div class="seat reserved">{{ seatNo }}</div>
-          </div>
-
-          }@else{ @if (checkIsSeatSelected(seatNo)!= -1) {
-          <div class="col-3">
-            <div class="seat selected" (click)="selectSeat(seatNo)">
-              {{ seatNo }}
+          @for (seat of seatMap; track seat.number) {
+            <div class="col-3 mb-2">
+              @switch (checkSeatStatus(seat.number)) {
+                @case ('selected') {
+                  <div class="seat bg-warning" (click)="selectSeat(seat.number)">
+                    {{ seat.number }}
+                  </div>
+                }
+                @case ('ocupado') {
+                  <div class="seat bg-danger text-white">
+                    {{ seat.number }}
+                  </div>
+                }
+                @case ('reservado') {
+                  <div class="seat bg-secondary text-white">
+                    {{ seat.number }}
+                  </div>
+                }
+                @default { <!-- disponible o cualquier otro estado -->
+                  <div class="seat bg-success text-white" (click)="selectSeat(seat.number)">
+                    {{ seat.number }}
+                  </div>
+                }
+              }
             </div>
-          </div>
-          }@else {
-          <div class="col-3">
-            <div class="seat available" (click)="selectSeat(seatNo)">
-              {{ seatNo }}
-            </div>
-          </div>
-          } } }
+          }
         </div>
       </div>
       <div class="col-8">
         @for (item of userSelectedSeatArray; track $index) {
-        <div class="row">
+        <div class="row mb-3">
           <div class="col-3">
             <label>Pasajero </label>
             <input
@@ -66,14 +73,14 @@
             />
           </div>
         </div>
-
         }
       </div>
     </div>
     <div class="row">
       <div class="col-12 text-center">
         <button class="btn btn-danger" (click)="bookNow()">
-          Reserva ahora</button>
+          Reserva ahora
+        </button>
       </div>
     </div>
   </div>
