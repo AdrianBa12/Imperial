@@ -2,7 +2,8 @@
 <section id="booking-form" class="my-4">
   <div class="container mt-5">
     <div class="row">
-      <div class="col-4">
+      <div class="col-sm-4">
+        <!-- Sección de asientos (se mantiene igual) -->
         <div class="row">
           <div class="col-12 text-end">
             <img
@@ -31,7 +32,7 @@
                     {{ seat.number }}
                   </div>
                 }
-                @default { <!-- disponible o cualquier otro estado -->
+                @default {
                   <div class="seat bg-success text-white" (click)="selectSeat(seat.number)">
                     {{ seat.number }}
                   </div>
@@ -41,29 +42,11 @@
           }
         </div>
       </div>
-      <div class="col-8">
-        @for (item of userSelectedSeatArray; track $index) {
-        <div class="row mb-3">
-          <div class="col-3">
-            <label>Pasajero </label>
-            <input
-              type="text"
-              [(ngModel)]="item.passengerName"
-              class="form-control"
-            />
-          </div>
-          <div class="col-2">
-            <label>Edad</label>
-            <input type="text" [(ngModel)]="item.age" class="form-control" />
-          </div>
-          <div class="col-2">
-            <label>Genero</label>
-            <select [(ngModel)]="item.gender" class="form-control">
-              <option value="Male">Masculino</option>
-              <option value="Fe-Male">Femenino</option>
-            </select>
-          </div>
-          <div class="col-2">
+      <div class="col-lg">
+        @for (item of userSelectedSeatArray; track $index; let i = $index) {
+        <div class="row mb-3 border p-3 rounded">
+          <!-- Asiento -->
+          <div class="col-md-2">
             <label>Asiento</label>
             <input
               disabled
@@ -72,14 +55,123 @@
               class="form-control"
             />
           </div>
+          
+          <!-- Tipo de Documento -->
+          <div class="col-md-2">
+            <label>Tipo/Documento</label>
+            <div class="btn-group d-flex" role="group">
+              <button 
+                type="button" 
+                class="btn"
+                [class.btn-primary]="item.tipoDocumento === 'dni'"
+                [class.btn-outline-primary]="item.tipoDocumento !== 'dni'"
+                (click)="setDocumentType(i, 'dni')">
+                DNI
+              </button>
+              <button 
+                type="button" 
+                class="btn"
+                [class.btn-primary]="item.tipoDocumento === 'pasaporte'"
+                [class.btn-outline-primary]="item.tipoDocumento !== 'pasaporte'"
+                (click)="setDocumentType(i, 'pasaporte')">
+                PASAPORTE/OTROS
+              </button>
+            </div>
+          </div>
+          <div class="row mb-3">
+          <!-- Número de Documento -->
+          <!-- En booking.component.html -->
+          <!-- En booking.component.html -->
+<div class="col-md-3">
+  <label>N° Documento</label>
+  <div class="input-group">
+    <input
+      type="text"
+      [(ngModel)]="item.numeroDocumento"
+      class="form-control"
+      [class.is-invalid]="!item.numeroDocumento && formSubmitted"
+      [disabled]="item.tipoDocumento !== 'dni'"
+      maxlength="8"
+      required
+    />
+    @if (item.tipoDocumento === 'dni') {
+      <button 
+        class="btn btn-outline-primary" 
+        type="button"
+        (click)="buscarDNI(i)"
+        [disabled]="!item.numeroDocumento || item.numeroDocumento.length !== 8 || buscandoDNI"
+      >
+        @if (buscandoDNI) {
+          <span class="spinner-border spinner-border-sm me-1"></span>
+          Buscando...
+        } @else {
+          <i class="bi bi-search me-1"></i> Buscar
+        }
+      </button>
+    }
+  </div>
+  @if (item.tipoDocumento === 'dni' && formSubmitted && !item.numeroDocumento) {
+    <div class="invalid-feedback d-block">
+      El número de documento es requerido
+    </div>
+  }
+  @if (item.tipoDocumento === 'dni' && item.numeroDocumento && item.numeroDocumento.length !== 8) {
+    <div class="text-warning small mt-1">
+      El DNI debe tener 8 dígitos
+    </div>
+  }
+</div>
+
+<!-- Eliminar la sección de género -->
+          
+          <!-- Nombre Completo -->
+          <div class="col-md-3">
+            <label>Nombre Completo</label>
+            <input
+              type="text"
+              [(ngModel)]="item.nombreCompleto"
+              class="form-control"
+              [class.is-invalid]="!item.nombreCompleto && formSubmitted"
+              [disabled]="item.tipoDocumento === 'dni'"
+            />
+          </div>
+          
+          <!-- Edad -->
+          <div class="col-md-1">
+            <label>Edad</label>
+            <input 
+              type="number" 
+              [(ngModel)]="item.edad" 
+              class="form-control"
+              [class.is-invalid]="!item.edad && formSubmitted"
+              [disabled]="item.tipoDocumento === 'dni'"
+            />
+          </div>
+          
+          <!-- Género -->
+          <div class="col-md-2">
+            <label>Género</label>
+            <select 
+              [(ngModel)]="item.genero" 
+              class="form-control"
+              [class.is-invalid]="!item.genero && formSubmitted"
+              [disabled]="item.tipoDocumento === 'dni'"
+            >
+              <option value="">Seleccionar</option>
+              <option value="masculino">Masculino</option>
+              <option value="femenino">Femenino</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+        </div>
         </div>
         }
       </div>
     </div>
-    <div class="row">
+    <div class="row mt-4">
       <div class="col-12 text-center">
-        <button class="btn btn-danger" (click)="bookNow()">
-          Reserva ahora
+        <button class="btn btn-danger btn-lg" (click)="bookNow()">
+          Reservar ahora
         </button>
       </div>
     </div>
