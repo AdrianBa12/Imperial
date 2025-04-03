@@ -98,9 +98,14 @@ export class MasterService {
   // En master.service.ts
 
 // Método para crear reservas
+// En master.service.ts
 crearReserva(datosReserva: any): Observable<any> {
   return this.http.post(`${this.apiURL}reservas`, {
-    data: datosReserva
+    data: {
+      ...datosReserva,
+      // Asegurar que el usuario se envíe como relación
+      usuario: datosReserva.usuario
+    }
   });
 }
 

@@ -98,28 +98,28 @@ export class AppComponent {
   });
 }
 
-  onLogin() {
-    this.masterSrv.onLogin(this.loginObj).subscribe(
-      (res: any) => {
-        // Adaptamos la respuesta de Strapi a nuestra estructura esperada
-        const userData = {
-          userId: res.user.id,
-          userName: res.user.username,
-          emailId: res.user.email,
-          fullName: res.user.fullName,
-          role: '3', // Rol de cliente
-          jwt: res.jwt // Guardamos el token JWT
-        };
-        
-        localStorage.setItem('redBusUser', JSON.stringify(userData));
-        this.loggedUserData = userData;
-        this.closeModel();
-      },
-      (error) => {
-        alert('Error de login: ' + error.message);
-      }
-    );
-  }
+ // En app.component.ts
+onLogin() {
+  this.masterSrv.onLogin(this.loginObj).subscribe(
+    (res: any) => {
+      const userData = {
+        userId: res.user.id, // Esto debe ser el ID correcto
+        userName: res.user.username,
+        emailId: res.user.email,
+        fullName: res.user.fullName,
+        role: '3',
+        jwt: res.jwt
+      };
+      
+      localStorage.setItem('redBusUser', JSON.stringify(userData));
+      this.loggedUserData = userData;
+      this.closeModel();
+    },
+    (error) => {
+      alert('Error de login: ' + error.message);
+    }
+  );
+}
 
   logoff() {
     localStorage.removeItem('redBusUser');
