@@ -95,4 +95,21 @@ export class MasterService {
 
     return this.http.get<any>(`${this.apiUrl}${dni}`, { headers });
   }
+  // En master.service.ts
+
+// Método para crear reservas
+crearReserva(datosReserva: any): Observable<any> {
+  return this.http.post(`${this.apiURL}reservas`, {
+    data: datosReserva
+  });
+}
+
+// Método para actualizar el mapa de asientos
+actualizarMapaAsientos(documentId: string, mapaAsientos: any[]): Observable<any> {
+  return this.http.put(`${this.apiURL}horario-de-autobuses/${documentId}`, {
+    data: {
+      mapaDeAsientos: mapaAsientos
+    }
+  });
+}
 }

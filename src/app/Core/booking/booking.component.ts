@@ -125,29 +125,72 @@ export class BookingComponent {
   }
 
   // En bookNow method
-  bookNow() {
-    this.formSubmitted = true;
+  // En booking.component.ts
+async bookNow() {
+  this.formSubmitted = true;
 
-    // Validación diferente para DNI y Pasaporte
-    const isValid = this.userSelectedSeatArray.every(item => {
-      if (this.userSelectedSeatArray.length > 4) {
-        alert('No puedes reservar más de 4 asientos');
-        return;
-      }
-      // Todos necesitan número de documento
-      if (!item.numeroDocumento) return false;
+  // Validación básica
+  if (this.userSelectedSeatArray.length === 0) {
+    alert('Por favor seleccione al menos un asiento');
+    return;
+  }
 
-      // Para pasaporte, validamos todos los campos excepto género
-      if (item.tipoDocumento === 'pasaporte') {
-        return item.nombreCompleto && item.edad; // Eliminado: && item.genero
-      }
-      
-      // Para DNI solo validamos el número de documento
+  // Validar datos de pasajeros
+  const datosIncompletos = this.userSelectedSeatArray.some(item => {
+    if (!item.numeroDocumento) return true;
+    if (item.tipoDocumento === 'pasaporte' && (!item.nombreCompleto || !item.edad)) {
       return true;
+    }
+    return false;
+  });
+
+  if (datosIncompletos) {
+    alert('Por favor complete todos los campos requeridos');
+    return;
+  }
+
+  try {
+    // 1. Crear reservas para cada asiento
+    const reservasPromesas = this.userSelectedSeatArray.map(pasajero => {
+      const reservaData = {
+        numeroDeasiento: pasajero.seatNo,
+        nombreCompleto: pasajero.nombreCompleto || 'SIN NOMBRE',
+        numeroDocumento: pasajero.numeroDocumento,
+        tipoDocumento: pasajero.tipoDocumento,
+        horario_de_autobus: this.scheduleId,
+      };
+      return this.masterSrv.crearReserva(reservaData).toPromise();
     });
 
-    // Resto del método permanece igual
+    await Promise.all(reservasPromesas);
+
+    // 2. Actualizar el mapa de asientos
+    const nuevoMapaAsientos = this.seatMap.map(asiento => {
+      const estaReservado = this.userSelectedSeatArray.some(
+        item => item.seatNo === asiento.number
+      );
+      return {
+        number: asiento.number,
+        estado: estaReservado ? 'ocupado' : asiento.estado
+      };
+    });
+
+    await this.masterSrv.actualizarMapaAsientos(
+      this.scheduleId,
+      nuevoMapaAsientos
+    ).toPromise();
+
+    // 3. Actualizar la vista y mostrar mensaje
+    alert('Reserva exitosa!');
+    this.getScheduleDetailsById(); // Recargar datos
+    this.userSelectedSeatArray = [];
+    this.formSubmitted = false;
+
+  } catch (error) {
+    console.error('Error en la reserva:', error);
+    alert('Error al procesar la reserva. Por favor intente nuevamente.');
   }
+}
   isSeatSelected(seatNo: number): boolean {
   return this.userSelectedSeatArray.some(item => item.seatNo === seatNo);
 }
