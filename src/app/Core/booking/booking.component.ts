@@ -84,22 +84,28 @@ export class BookingComponent {
 
   // En selectSeat method
   selectSeat(seatNo: number) {
+    // Verificar si ya se han seleccionado 4 asientos
+    if (this.userSelectedSeatArray.length >= 4 && 
+        !this.userSelectedSeatArray.some(item => item.seatNo === seatNo)) {
+      alert('Solo puedes seleccionar un máximo de 4 asientos');
+      return;
+    }
+  
     const seat = this.seatMap.find(s => s.number === seatNo);
-
+    
     if (seat?.estado === 'ocupado') return;
-
+    
     const existingIndex = this.userSelectedSeatArray.findIndex(item => item.seatNo === seatNo);
-
+    
     if (existingIndex === -1) {
       const obj = {
         passengerId: 0,
         bookingId: 0,
         seatNo: seatNo,
-        tipoDocumento: 'dni', // Valor por defecto
+        tipoDocumento: 'dni',
         numeroDocumento: '',
         nombreCompleto: '',
         edad: null
-        // Eliminado: genero
       };
       this.userSelectedSeatArray.push(obj);
     } else {
@@ -114,7 +120,7 @@ export class BookingComponent {
     if (type === 'dni') {
       this.userSelectedSeatArray[index].nombreCompleto = '';
       this.userSelectedSeatArray[index].edad = null;
-      this.userSelectedSeatArray[index].genero = '';
+      
     }
   }
 
@@ -124,6 +130,10 @@ export class BookingComponent {
 
     // Validación diferente para DNI y Pasaporte
     const isValid = this.userSelectedSeatArray.every(item => {
+      if (this.userSelectedSeatArray.length > 4) {
+        alert('No puedes reservar más de 4 asientos');
+        return;
+      }
       // Todos necesitan número de documento
       if (!item.numeroDocumento) return false;
 
@@ -131,11 +141,14 @@ export class BookingComponent {
       if (item.tipoDocumento === 'pasaporte') {
         return item.nombreCompleto && item.edad; // Eliminado: && item.genero
       }
-
+      
       // Para DNI solo validamos el número de documento
       return true;
     });
 
     // Resto del método permanece igual
   }
+  isSeatSelected(seatNo: number): boolean {
+  return this.userSelectedSeatArray.some(item => item.seatNo === seatNo);
+}
 }

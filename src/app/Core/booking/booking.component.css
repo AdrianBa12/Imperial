@@ -9,3 +9,8 @@ a.seat {
   cursor: pointer;
 }
 
+/* En booking.component.css */
+.seat.limit-reached {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
