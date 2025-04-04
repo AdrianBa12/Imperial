@@ -19,6 +19,16 @@ export class BookingComponent {
   userSelectedSeatArray: any[] = [];
   buscandoDNI: boolean = false;
 
+  mostrarResumen: boolean = false;
+  mostrarFormaPago: boolean = false;
+  procesandoPago: boolean = false;
+  datosTarjeta: any = {
+    numero: '',
+    nombre: '',
+    expiracion: '',
+    cvv: ''
+  };
+
   constructor(
     private activedRoute: ActivatedRoute,
     private masterSrv: MasterService
@@ -126,8 +136,7 @@ export class BookingComponent {
 
   // En bookNow method
   // En booking.component.ts
-  async bookNow() {
-    
+  bookNow() {
     this.formSubmitted = true;
   
     // Validación básica
@@ -135,16 +144,6 @@ export class BookingComponent {
       alert('Por favor seleccione al menos un asiento');
       return;
     }
-  
-    // Obtener datos del usuario logueado
-    const loggedUserDat = localStorage.getItem('redBusUser');
-    if (!loggedUserDat) {
-      alert('Por favor inicie sesión para realizar una reserva');
-      return;
-    }
-  
-    const loggData = JSON.parse(loggedUserDat);
-    const userId = loggData.userId; // Obtener el ID del usuario
   
     // Validar datos de pasajeros
     const datosIncompletos = this.userSelectedSeatArray.some(item => {
@@ -160,7 +159,33 @@ export class BookingComponent {
       return;
     }
   
+    // Mostrar resumen en lugar de procesar directamente
+    this.mostrarResumen = true;
+    this.mostrarFormaPago = false;
+  }
+  
+  // Agrega este nuevo método para confirmar el pago
+  async confirmarPago() {
+    this.procesandoPago = true;
+    
     try {
+      // Validar datos de tarjeta (simulación)
+      if (!this.datosTarjeta.numero || !this.datosTarjeta.nombre || 
+          !this.datosTarjeta.expiracion || !this.datosTarjeta.cvv) {
+        alert('Por favor complete todos los datos de la tarjeta');
+        return;
+      }
+  
+      // Obtener datos del usuario logueado
+      const loggedUserDat = localStorage.getItem('redBusUser');
+      if (!loggedUserDat) {
+        alert('Por favor inicie sesión para realizar una reserva');
+        return;
+      }
+  
+      const loggData = JSON.parse(loggedUserDat);
+      const userId = loggData.userId;
+  
       // 1. Crear reservas para cada asiento
       const reservasPromesas = this.userSelectedSeatArray.map(pasajero => {
         const reservaData = {
@@ -169,7 +194,7 @@ export class BookingComponent {
           numeroDocumento: pasajero.numeroDocumento,
           tipoDocumento: pasajero.tipoDocumento,
           horario_de_autobus: this.scheduleId,
-          usuario: userId // Agregamos el ID del usuario
+          usuario: userId
         };
         return this.masterSrv.crearReserva(reservaData).toPromise();
       });
@@ -192,15 +217,20 @@ export class BookingComponent {
         nuevoMapaAsientos
       ).toPromise();
   
-      // 3. Actualizar la vista y mostrar mensaje
-      alert('Reserva exitosa!');
-      this.getScheduleDetailsById(); // Recargar datos
+      // 3. Cerrar modal y limpiar
+      this.mostrarResumen = false;
+      this.mostrarFormaPago = false;
+      this.procesandoPago = false;
+      
+      alert('¡Pago y reserva completados con éxito!');
+      this.getScheduleDetailsById();
       this.userSelectedSeatArray = [];
       this.formSubmitted = false;
   
     } catch (error) {
       console.error('Error en la reserva:', error);
-      alert('Error al procesar la reserva. Por favor intente nuevamente.');
+      alert('Error al procesar el pago. Por favor intente nuevamente.');
+      this.procesandoPago = false;
     }
   }
   isSeatSelected(seatNo: number): boolean {

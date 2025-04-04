@@ -14,3 +14,35 @@ a.seat {
   opacity: 0.5;
   cursor: not-allowed;
 }
+/* Estilos para el modal de resumen */
+.modal {
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  border-radius: 10px;
+}
+
+/* Estilos para las tarjetas de pasajeros */
+.card {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+}
+
+/* Efecto hover para botones */
+.btn:hover {
+  opacity: 0.9;
+}
+
+/* Estilos para los inputs de pago */
+.form-control {
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+  padding: 10px;
+}
+
+/* Estilos para el resumen de pago */
+.text-success {
+  color: #28a745 !important;
+  font-weight: bold;
+}
