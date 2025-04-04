@@ -4,9 +4,10 @@ import { MasterService } from '../Service/master.service';
 import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-booking',
-  imports: [FormsModule],
+  imports: [FormsModule,CommonModule],
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.css',
 })

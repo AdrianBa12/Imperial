@@ -139,7 +139,7 @@
     </div>
   </div>
   <!-- Agrega esto al final del template, antes del cierre del container -->
-@if (mostrarResumen) {
+  @if (mostrarResumen) {
   <div class="modal fade show" style="display: block; background-color: rgba(0,0,0,0.5);" id="resumenModal">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -157,10 +157,10 @@
                 <div class="pt-2">
                   <p><strong>Salida:</strong> {{ scheduleData.terminalSalidaId.nombreTerminal }}</p>
                   <p><strong>Llegada:</strong> {{ scheduleData.terminalLlegadaId.nombreTerminal }}</p>
-                  <p><strong>Fecha:</strong> {{ scheduleData.fechaDeSalida  }}</p>
+                  <p><strong>Fecha:</strong> {{ scheduleData.fechaDeSalida }}</p>
                   <p><strong>Duración:</strong> {{ scheduleData.duracionEnHoras }} horas</p>
                 </div>
-                
+
                 <div class="mt-4">
                   <h5>Pasajeros</h5>
                   @for (item of userSelectedSeatArray; track $index) {
@@ -175,7 +175,7 @@
                   }
                 </div>
               </div>
-              
+
               <div class="col-md-5">
                 <div class="card">
                   <div class="card-body">
@@ -183,11 +183,11 @@
                     <hr>
                     <div class="d-flex justify-content-between mb-2">
                       <span>Subtotal:</span>
-                      <span>S/. {{ scheduleData.precio * userSelectedSeatArray.length }}</span>
+                      <span>S/. {{ (((scheduleData.precio * userSelectedSeatArray.length)/100)*82) }}</span>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
                       <span>Impuestos:</span>
-                      <span>S/. 0.00</span>
+                      <span>S/. {{((scheduleData.precio * userSelectedSeatArray.length)/100)*18}}</span>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
                       <span>Descuentos:</span>
@@ -196,38 +196,39 @@
                     <hr>
                     <div class="d-flex justify-content-between fw-bold">
                       <span>Total a Pagar:</span>
-                      <span class="text-success">S/. {{ scheduleData.precio * userSelectedSeatArray.length }}</span>
+                      <span>S/. {{ (scheduleData.precio * userSelectedSeatArray.length) | number:'1.2-2'
+                        }}</span>
                     </div>
-                    
+
                     @if (!mostrarFormaPago) {
                     <button class="btn btn-primary w-100 mt-3" (click)="mostrarFormaPago = true">
                       Proceder al Pago
                     </button>
                     }
-                    
+
                     @if (mostrarFormaPago) {
                     <div class="mt-4">
                       <h6>Información de Pago</h6>
                       <div class="form-group mb-3">
                         <label>Número de Tarjeta</label>
-                        <input type="text" class="form-control" placeholder="1234 5678 9012 3456" 
-                               [(ngModel)]="datosTarjeta.numero" maxlength="16">
+                        <input type="text" class="form-control" placeholder="1234 5678 9012 3456"
+                          [(ngModel)]="datosTarjeta.numero" maxlength="16">
                       </div>
                       <div class="form-group mb-3">
                         <label>Nombre en Tarjeta</label>
                         <input type="text" class="form-control" placeholder="Nombre Completo"
-                               [(ngModel)]="datosTarjeta.nombre">
+                          [(ngModel)]="datosTarjeta.nombre">
                       </div>
                       <div class="row">
                         <div class="col-md-6 mb-3">
                           <label>Fecha Expiración</label>
                           <input type="text" class="form-control" placeholder="MM/AA"
-                                 [(ngModel)]="datosTarjeta.expiracion">
+                            [(ngModel)]="datosTarjeta.expiracion">
                         </div>
                         <div class="col-md-6 mb-3">
                           <label>CVV</label>
-                          <input type="text" class="form-control" placeholder="123"
-                                 [(ngModel)]="datosTarjeta.cvv" maxlength="3">
+                          <input type="text" class="form-control" placeholder="123" [(ngModel)]="datosTarjeta.cvv"
+                            maxlength="3">
                         </div>
                       </div>
                       <button class="btn btn-success w-100" (click)="confirmarPago()" [disabled]="procesandoPago">
