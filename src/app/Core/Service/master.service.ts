@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 })
 export class MasterService {
 
-  private apiURL: string = 'http://localhost:1337/api/';
-  private authURL: string = 'http://localhost:1337/api/auth/';
+  private apiURL: string = 'https://devoted-apparel-741955edca.strapiapp.com/api/';
+private authURL: string = 'https://devoted-apparel-741955edca.strapiapp.com/api/auth/';
   private apiPeruToken = '25222079ce57429371cf6d908d8b283966aad65f8e64caf50c2fff09a5727ce6';
   private apiUrl = 'https://apiperu.dev/api/dni/';
   constructor(private http: HttpClient) { }
@@ -19,16 +19,21 @@ export class MasterService {
   }
 
 
-  searchBus(from: number, to: number, travelDate: string): Observable<any[]> {
-    const params = {
-      'filters[terminalSalidaId][provinciaId][$in][0]': from,
-      'filters[terminalLlegadaId][provinciaId][$in][0]': to,
-      'filters[fechaDeSalida][$eq]': travelDate,
-      'populate[terminalSalidaId][populate][0]': 'provinciaId',
-      'populate[terminalLlegadaId][populate][0]': 'provinciaId',
-    };
+  searchBus(from: number, to: number, travelDate: string): Observable<any> {
+    // Construye los parámetros correctamente para Strapi v5
+    let params = new HttpParams()
+      .set('filters[terminalSalidaId][provinciaId][id][$eq]', from.toString())
+      .set('filters[terminalLlegadaId][provinciaId][id][$eq]', to.toString())
+      .set('filters[fechaDeSalida][$gte]', new Date(travelDate).toISOString())
+      .set('filters[fechaDeSalida][$lt]', new Date(new Date(travelDate).getTime() + 86400000).toISOString()) // +1 día
+      .set('populate[0]', 'terminalSalidaId.provinciaId')
+      .set('populate[1]', 'terminalLlegadaId.provinciaId')
+      .set('populate[2]', 'bus')
+      .set('populate[3]', 'conductor')
+      .set('populate[4]', 'terminalSalidaId')
+      .set('populate[5]', 'terminalLlegadaId');
 
-    return this.http.get<any[]>(`${this.apiURL}horario-de-autobuses`, { params });
+    return this.http.get<any>(`${this.apiURL}horario-de-autobuses`, { params });
   }
 
   getScheduleById(documentId: string): Observable<any> {
