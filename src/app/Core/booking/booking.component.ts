@@ -5,9 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { NavbarComponent } from "../navbar/navbar.component";
+import { FooterComponent } from "../component/footer/footer.component";
 @Component({
   selector: 'app-booking',
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule, CommonModule, NavbarComponent, FooterComponent],
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.css',
 })

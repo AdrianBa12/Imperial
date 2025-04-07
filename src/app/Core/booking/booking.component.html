@@ -1,48 +1,66 @@
 <!-- Booking Form -->
+<app-navbar />
 <section id="booking-form" class="my-4">
   <div class="container mt-5">
     <div class="row">
-      <div class="col-sm-4">
-        <!-- Sección de asientos (se mantiene igual) -->
-        <div class="row">
-          <div class="col-12 text-end">
-            <img src="https://cdn-icons-png.flaticon.com/512/2907/2907720.png" alt="Driver Icon" class="driver" />
+      <div class="col-sm-4 ">
+        <!-- Sección de asientos mejorada -->
+        <div class="bus-container p-3 rounded-3" style="background-color: #f8f9fa; border: 2px solid #dee2e6;">
+          <!-- Icono de conductor -->
+          <div class="row mb-3">
+            <div class="col-12 text-center">
+              <img src="https://cdn-icons-png.flaticon.com/512/2907/2907720.png" alt="Driver" class="driver-icon"
+                style="width: 40px; height: 40px; filter: brightness(0.7);" />
+              <div class="text-muted small mt-1">FRENTE DEL BUS</div>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          @for (seat of seatMap; track seat.number) {
-          <div class="col-3 mb-2">
-            @switch (checkSeatStatus(seat.number)) {
-            @case ('selected') {
-            <div class="seat bg-warning" (click)="selectSeat(seat.number)"
-              [class.limit-reached]="userSelectedSeatArray.length >= 4 && !isSeatSelected(seat.number)">
-              {{ seat.number }}
+
+          <!-- Mapa de asientos -->
+          <div class="row g-2 justify-content-center">
+            @for (seat of seatMap; track seat.number) {
+            <div class="col-3   mb-2">
+              @switch (checkSeatStatus(seat.number)) {
+              @case ('selected') {
+              <div class="seat bg-warning text-dark fw-bold shadow-sm" (click)="selectSeat(seat.number)"
+                [class.limit-reached]="userSelectedSeatArray.length >= 4 && !isSeatSelected(seat.number)">
+                {{ seat.number }}
+                <div class="seat-indicator"></div>
+              </div>
+              }
+              @case ('ocupado') {
+              <div class="seat bg-danger text-white">
+                {{ seat.number }}
+                <i class="bi bi-x-circle-fill position-absolute top-0 end-0 small"></i>
+              </div>
+              }
+              @case ('reservado') {
+              <div class="seat bg-secondary text-white">
+                {{ seat.number }}
+                <i class="bi bi-lock-fill position-absolute top-0 end-0 small"></i>
+              </div>
+              }
+              @default {
+              <div class="seat bg-success text-white" (click)="selectSeat(seat.number)"
+                [class.limit-reached]="userSelectedSeatArray.length >= 4">
+                {{ seat.number }}
+              </div>
+              }
+              }
             </div>
-            }
-            @case ('ocupado') {
-            <div class="seat bg-danger text-white">
-              {{ seat.number }}
-            </div>
-            }
-            @case ('reservado') {
-            <div class="seat bg-secondary text-white">
-              {{ seat.number }}
-            </div>
-            }
-            @default {
-            <div class="seat bg-success text-white" (click)="selectSeat(seat.number)"
-              [class.limit-reached]="userSelectedSeatArray.length >= 4">
-              {{ seat.number }}
-            </div>
-            }
             }
           </div>
-          }
-        </div>
-        <div class="row mt-2">
-          <div class="col-12 text-center">
-            <div class="alert alert-info">
-              <strong>Máximo 4 asientos</strong> por reserva. Asientos seleccionados: {{userSelectedSeatArray.length}}/4
+
+          <!-- Contador de asientos -->
+          <div class="row mt-3">
+            <div class="col-12">
+              <div class="alert alert-warning border-0 rounded-3">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span><strong>Límite:</strong> 4 asientos por reserva</span>
+                  <span class="badge bg-dark rounded-pill">
+                    {{userSelectedSeatArray.length}}/4 seleccionados
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -252,3 +270,4 @@
   </div>
   }
 </section>
+<app-footer />

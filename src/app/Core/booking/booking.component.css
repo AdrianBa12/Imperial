@@ -1,18 +1,89 @@
-a.seat {
-  width: 40px;
-  height: 40px;
+/* Estilos para los asientos */
+.seat {
+  width: 45px;
+  max-width: 45px;
+  height: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 5px;
-  border-radius: 5px;
+  margin: 0 auto;
+  border-radius: 8px;
   cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  font-size: 0.9rem;
 }
 
-/* En booking.component.css */
+.seat:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.seat.bg-success:hover {
+  background-color: #218838 !important;
+  border-color: #1e7e34;
+}
+
+.seat.bg-warning {
+  background-color: #ffc107 !important;
+  border-color: #e0a800;
+  color: #212529 !important;
+}
+
+.seat.bg-warning:hover {
+  background-color: #e0a800 !important;
+}
+
+.seat.bg-danger, .seat.bg-secondary {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+/* Indicador para asientos seleccionados */
+.seat-indicator {
+  position: absolute;
+  bottom: 3px;
+  width: 10px;
+  height: 10px;
+  background-color: #28a745;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+/* Efecto cuando se alcanza el límite */
 .seat.limit-reached {
   opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Contenedor del bus */
+.bus-container {
+  position: relative;
+}
+
+.bus-container:before {
+  content: "";
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 2px;
+  background-color: #6c757d;
+  opacity: 0.3;
+}
+
+/* Icono del conductor */
+.driver-icon {
+  transition: all 0.3s ease;
+}
+
+.driver-icon:hover {
+  transform: scale(1.1);
+  filter: brightness(1);
 }
 /* Estilos para el modal de resumen */
 .modal {
