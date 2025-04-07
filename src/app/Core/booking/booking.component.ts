@@ -180,7 +180,7 @@ bookNow() {
   // Agrega este nuevo método para confirmar el pago
   async confirmarPago() {
     this.procesandoPago = true;
-
+  
     try {
       // Validar datos de tarjeta (simulación)
       if (!this.datosTarjeta.numero || !this.datosTarjeta.nombre ||
@@ -188,17 +188,17 @@ bookNow() {
         alert('Por favor complete todos los datos de la tarjeta');
         return;
       }
-
+  
       // Obtener datos del usuario logueado
       const loggedUserDat = localStorage.getItem('redBusUser');
       if (!loggedUserDat) {
         alert('Por favor inicie sesión para realizar una reserva');
         return;
       }
-
+  
       const loggData = JSON.parse(loggedUserDat);
       const userId = loggData.userId;
-
+  
       // 1. Crear reservas para cada asiento
       const reservasPromesas = this.userSelectedSeatArray.map(pasajero => {
         const reservaData = {
@@ -211,9 +211,9 @@ bookNow() {
         };
         return this.masterSrv.crearReserva(reservaData).toPromise();
       });
-
-      await Promise.all(reservasPromesas);
-
+  
+      const reservasCreadas = await Promise.all(reservasPromesas);
+  
       // 2. Actualizar el mapa de asientos
       const nuevoMapaAsientos = this.seatMap.map(asiento => {
         const estaReservado = this.userSelectedSeatArray.some(
@@ -224,27 +224,134 @@ bookNow() {
           estado: estaReservado ? 'ocupado' : asiento.estado
         };
       });
-
+  
       await this.masterSrv.actualizarMapaAsientos(
         this.scheduleId,
         nuevoMapaAsientos
       ).toPromise();
-
-      // 3. Cerrar modal y limpiar
+  
+      // 3. Generar y descargar comprobante
+      this.generarComprobante(reservasCreadas);
+  
+      // 4. Cerrar modal y limpiar
       this.mostrarResumen = false;
       this.mostrarFormaPago = false;
       this.procesandoPago = false;
-
-      alert('¡Pago y reserva completados con éxito!');
+      
       this.getScheduleDetailsById();
       this.userSelectedSeatArray = [];
       this.formSubmitted = false;
-
+  
     } catch (error) {
       console.error('Error en la reserva:', error);
       alert('Error al procesar el pago. Por favor intente nuevamente.');
       this.procesandoPago = false;
     }
+  }
+
+  generarComprobante(reservas: any[]) {
+    // Crear contenido del comprobante
+    const contenido = `
+      <!DOCTYPE html>
+      <html lang="es">
+      <head>
+        <meta charset="UTF-8">
+        <title>Comprobante de Compra</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 20px; }
+          .header { text-align: center; margin-bottom: 20px; }
+          .logo { max-width: 150px; margin-bottom: 10px; }
+          .title { color: #d32f2f; font-size: 24px; margin-bottom: 5px; }
+          .subtitle { color: #555; font-size: 16px; }
+          .section { margin-bottom: 20px; }
+          .section-title { background-color: #f5f5f5; padding: 8px; font-weight: bold; }
+          .info-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+          .info-table td { padding: 8px; border-bottom: 1px solid #ddd; }
+          .info-table tr:last-child td { border-bottom: none; }
+          .passenger-table { width: 100%; border-collapse: collapse; }
+          .passenger-table th { background-color: #f5f5f5; padding: 10px; text-align: left; }
+          .passenger-table td { padding: 10px; border-bottom: 1px solid #ddd; }
+          .total { font-size: 18px; font-weight: bold; text-align: right; margin-top: 20px; }
+          .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #777; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div class="title">COMPROBANTE DE COMPRA</div>
+          <div class="subtitle">${new Date().toLocaleDateString('es-PE', { day: '2-digit', month: 'long', year: 'numeric' })}</div>
+        </div>
+  
+        <div class="section">
+          <div class="section-title">INFORMACIÓN DEL VIAJE</div>
+          <table class="info-table">
+            <tr>
+              <td><strong>Ruta:</strong></td>
+              <td>${this.scheduleData.terminalSalidaId.nombreTerminal} - ${this.scheduleData.terminalLlegadaId.nombreTerminal}</td>
+            </tr>
+            <tr>
+              <td><strong>Fecha:</strong></td>
+              <td>${this.scheduleData.fechaDeSalida}</td>
+            </tr>
+            <tr>
+              <td><strong>Hora de salida:</strong></td>
+              <td>${this.scheduleData.horaDeSalida}</td>
+            </tr>
+            <tr>
+              <td><strong>Duración:</strong></td>
+              <td>${this.scheduleData.duracionEnHoras} horas</td>
+            </tr>
+          </table>
+        </div>
+  
+        <div class="section">
+          <div class="section-title">DETALLE DE PASAJEROS</div>
+          <table class="passenger-table">
+            <thead>
+              <tr>
+                <th>Asiento</th>
+                <th>Nombre</th>
+                <th>Documento</th>
+                <th>Precio</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${this.userSelectedSeatArray.map(pasajero => `
+                <tr>
+                  <td>${pasajero.seatNo}</td>
+                  <td>${pasajero.nombreCompleto || 'SIN NOMBRE'}</td>
+                  <td>${pasajero.tipoDocumento} ${pasajero.numeroDocumento}</td>
+                  <td>S/. ${this.scheduleData.precio.toFixed(2)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+  
+        <div class="total">
+          TOTAL: S/. ${(this.scheduleData.precio * this.userSelectedSeatArray.length).toFixed(2)}
+        </div>
+  
+        <div class="footer">
+          <p>Gracias por su compra. Presente este comprobante al abordar el bus.</p>
+          <p>Número de reserva: ${reservas[0]?.data?.bookingId || 'N/A'}</p>
+        </div>
+      </body>
+      </html>
+    `;
+  
+    // Crear blob y descargar
+    const blob = new Blob([contenido], { type: 'text/html' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Comprobante_${new Date().toISOString().slice(0, 10)}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  
+    // Mostrar alerta de éxito
+    alert('¡Pago y reserva completados con éxito! Se ha descargado el comprobante.');
   }
   isSeatSelected(seatNo: number): boolean {
     return this.userSelectedSeatArray.some(item => item.seatNo === seatNo);
