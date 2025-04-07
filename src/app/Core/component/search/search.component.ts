@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { MasterService } from '../Service/master.service';
+import { MasterService } from '../../Service/master.service';
 import { NgbCarouselConfig, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 
 // Define interfaces para los datos
@@ -27,12 +27,12 @@ interface IHorarioAutobus {
   numeroPLacaBus: string;
   terminalSalidaId: any;
   terminalLlegadaId: any;
-  duracionEnHoras:number;
+  duracionEnHoras: number;
 }
 
 @Component({
   selector: 'app-search',
-  imports: [AsyncPipe, FormsModule, DatePipe, RouterLink, NgbCarouselModule,CommonModule],
+  imports: [AsyncPipe, FormsModule, DatePipe, RouterLink, NgbCarouselModule, CommonModule],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css',
 })
@@ -49,35 +49,12 @@ export class SearchComponent implements OnInit {
   };
 
   // En tu componente
-images = [
-  {
-    url: 'https://res.cloudinary.com/dd6ferfis/image/upload/v1728709354/slide1_kydgds.jpg',
-    title: 'Viaja con Comodidad',
-    description: 'Descubre nuestras rutas premium'
-  },
-  {
-    url: 'https://res.cloudinary.com/dd6ferfis/image/upload/v1728784240/slide2_giduxc.jpg',
-    title: 'Servicio de Primera',
-    description: 'Asientos cómodos y amplios'
-  },
-  {
-    url: 'https://res.cloudinary.com/dd6ferfis/image/upload/v1728786636/slide3_estnf9.jpg',
-    title: 'Puntualidad Garantizada',
-    description: 'Llegamos a tiempo, siempre'
-  }
-];
-  constructor(config: NgbCarouselConfig) {
-		// customize default values of carousels used by this component tree
-		config.interval = 2000;
-		config.wrap = true;
-		config.keyboard = true;
-		config.pauseOnHover = false;
-	}
-  
+ 
+
   ngOnInit(): void {
     this.getAllLocations();
   }
- 
+
 
   getAllLocations() {
     this.locations$ = this.masterSrv.getProvincias().pipe(
@@ -114,7 +91,7 @@ images = [
             terminalSalidaId: item.terminalSalidaId,
             terminalLlegadaId: item.terminalLlegadaId,
             claseDeBus: item.claseDeBus,
-            duracionEnHoras:item.duracionEnHoras
+            duracionEnHoras: item.duracionEnHoras
           }));
           this.isLoading = false; // Ocultar spinner de carga
         },

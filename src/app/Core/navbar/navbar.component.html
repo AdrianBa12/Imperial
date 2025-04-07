@@ -1,0 +1,170 @@
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <img src="https://res.cloudinary.com/dd6ferfis/image/upload/v1728702908/LogoImperial_rtgf6p.png" alt="Logo"
+                style="width: 10rem" />
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-bus"></i>Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-train"></i>Contactanos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-airplane"></i>Ofertas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-bus"></i>Buses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/search']"><i
+                            class="icon bi bi-ticket-perforated"></i>Seguimiento</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-headset"></i>Ayuda?</a>
+                </li>
+                @if (loggedUserData) { @if (loggedUserData.role === 'Vendor') {
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/schedule']"><i class="icon bi bi-headset"></i>horario de
+                        autobuses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/bookings']"><i class="icon bi bi-headset"></i>Reservas</a>
+                </li>
+
+                }
+                <li class="nav-item">
+                    <a class="nav-link text-success"><i class="icon bi bi-person"></i>{{ loggedUserData.userName }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-danger" (click)="logoff()"><i class="icon bi bi-person"></i>Cerrar
+                        Sesion</a>
+                </li>
+
+                } @else {
+
+                <li class="nav-item">
+                    <a class="nav-link text-danger" (click)="openModel()"><i class="icon bi bi-person"></i> Iniciar
+                        Sesion/Crear
+                        cuenta</a>
+                </li>
+
+                }
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                @if(isLoginForm){
+
+                <h4 class="modal-title mb-4">Iniciar Sesion</h4>
+
+                <form>
+                    <!-- Email input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="email" name="userName" [(ngModel)]="loginObj.userName" id="form2Example1"
+                            class="form-control" />
+                        <label class="form-label" for="form2Example1">Email o Usuario</label>
+                    </div>
+
+                    <!-- Password input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="password" name="password" [(ngModel)]="loginObj.password" id="form2Example2"
+                            class="form-control" />
+                        <label class="form-label" for="form2Example2">Contraseña</label>
+                    </div>
+
+                    <!-- 2 column grid layout for inline styling -->
+                    <div class="row mb-4">
+                        <div class="col d-flex justify-content-center">
+                            <!-- Checkbox -->
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
+                                <label class="form-check-label" for="form2Example31">
+                                    Recordar
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit button -->
+                    <button type="button" (click)="onLogin()" data-mdb-ripple-init
+                        class="btn btn-primary btn-block mb-4">
+                        Iniciar Sesion
+                    </button>
+
+                    <!-- Register buttons -->
+                    <div class="text-center">
+                        <p>No eres miembro? <a class="text-danger" (click)="isLoginForm = false">Registrate</a></p>
+                    </div>
+                </form>
+
+                }@else {
+                <h4 class="modal-title mb-4">Crear cuenta</h4>
+                <form>
+                    <!-- Email input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="email" id="form2Example1" name="emailId" [(ngModel)]="registerObj.emailId"
+                            class="form-control" />
+                        <label class="form-label" for="form2Example1">Email </label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="email" name="userName" [(ngModel)]="registerObj.userName" class="form-control" />
+                        <label class="form-label" for="form2Example1">Nombre de usuario</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="email" name="fullName" [(ngModel)]="registerObj.fullName" class="form-control" />
+                        <label class="form-label" for="form2Example1">Nombre Completo</label>
+                    </div>
+
+                    <!-- Password input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="password" name="password" [(ngModel)]="registerObj.password"
+                            class="form-control" />
+                        <label class="form-label" for="form2Example2">Contraseña</label>
+                    </div>
+
+                    <!-- Submit button -->
+                    <button type="button" (click)="onRegister()" data-mdb-button-init data-mdb-ripple-init
+                        class="btn btn-primary btn-block mb-4">
+                        Crear cuenta
+                    </button>
+
+                    <button type="button" (click)="onVendorRegister()" data-mdb-button-init data-mdb-ripple-init
+                        class="btn btn-primary btn-block mb-4">
+                        Registrar Proveedor
+                    </button>
+
+                    <!-- Register buttons -->
+                    <div class="text-center">
+                        <p>Ya eres miembro? <a class="text-danger" (click)="isLoginForm = true">Iniciar Sesion</a></p>
+                    </div>
+                </form>
+
+                }
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="closeModel()">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

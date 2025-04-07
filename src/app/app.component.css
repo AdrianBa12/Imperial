@@ -119,23 +119,4 @@
   --bs-form-invalid-border-color: #dc3545;
 }
 
-.navbar {
-  background-color: var(--bs-warning);
 
-}
-.card {
-    transition: transform 0.3s ease;
-    overflow: hidden;
-  }
-  
-  .card:hover {
-    transform: scale(1.02);
-  }
-  
-  .card-img {
-    transition: transform 0.5s ease;
-  }
-  
-  .card:hover .card-img {
-    transform: scale(1.05);
-  }
