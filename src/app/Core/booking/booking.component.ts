@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { NavbarComponent } from "../navbar/navbar.component";
+import { NavbarComponent } from "../component/navbar/navbar.component";
 import { FooterComponent } from "../component/footer/footer.component";
 @Component({
   selector: 'app-booking',
@@ -139,56 +139,66 @@ export class BookingComponent {
 
   // En bookNow method
   // En booking.component.ts
-  bookNow() {
-    this.formSubmitted = true;
-  
-    // Validación básica
-    if (this.userSelectedSeatArray.length === 0) {
-      alert('Por favor seleccione al menos un asiento');
-      return;
-    }
-  
-    // Validar datos de pasajeros
-    const datosIncompletos = this.userSelectedSeatArray.some(item => {
-      if (!item.numeroDocumento) return true;
-      if (item.tipoDocumento === 'pasaporte' && (!item.nombreCompleto || !item.edad)) {
-        return true;
-      }
-      return false;
-    });
-  
-    if (datosIncompletos) {
-      alert('Por favor complete todos los campos requeridos');
-      return;
-    }
-  
-    // Mostrar resumen en lugar de procesar directamente
-    this.mostrarResumen = true;
-    this.mostrarFormaPago = false;
+  // Agrega este método para eliminar pasajeros
+removePassenger(index: number) {
+  this.userSelectedSeatArray.splice(index, 1);
+}
+
+// Modifica la validación en bookNow()
+bookNow() {
+  this.formSubmitted = true;
+
+  if (this.userSelectedSeatArray.length === 0) {
+    alert('Por favor seleccione al menos un asiento');
+    return;
   }
-  
+
+  const datosIncompletos = this.userSelectedSeatArray.some(item => {
+    // Validar número de documento
+    if (!item.numeroDocumento) return true;
+    if (item.tipoDocumento === 'dni' && item.numeroDocumento.length !== 8) return true;
+    if (item.tipoDocumento === 'pasaporte' && item.numeroDocumento.length < 6) return true;
+    
+    // Validar nombre completo y edad
+    if (!item.nombreCompleto || !item.edad && item.edad !== 0) return true;
+    
+    // Validar rango de edad
+    if (item.edad < 0 || item.edad > 120) return true;
+    
+    return false;
+  });
+
+  if (datosIncompletos) {
+    alert('Por favor complete todos los campos requeridos con información válida');
+    return;
+  }
+
+  this.mostrarResumen = true;
+  this.mostrarFormaPago = false;
+}
+
   // Agrega este nuevo método para confirmar el pago
   async confirmarPago() {
     this.procesandoPago = true;
-    
+
     try {
       // Validar datos de tarjeta (simulación)
-      if (!this.datosTarjeta.numero || !this.datosTarjeta.nombre || 
-          !this.datosTarjeta.expiracion || !this.datosTarjeta.cvv) {
+      if (!this.datosTarjeta.numero || !this.datosTarjeta.nombre ||
+        !this.datosTarjeta.expiracion || !this.datosTarjeta.cvv) {
         alert('Por favor complete todos los datos de la tarjeta');
         return;
       }
-  
+
       // Obtener datos del usuario logueado
       const loggedUserDat = localStorage.getItem('redBusUser');
       if (!loggedUserDat) {
         alert('Por favor inicie sesión para realizar una reserva');
         return;
       }
-  
+
       const loggData = JSON.parse(loggedUserDat);
       const userId = loggData.userId;
-  
+
       // 1. Crear reservas para cada asiento
       const reservasPromesas = this.userSelectedSeatArray.map(pasajero => {
         const reservaData = {
@@ -201,9 +211,9 @@ export class BookingComponent {
         };
         return this.masterSrv.crearReserva(reservaData).toPromise();
       });
-  
+
       await Promise.all(reservasPromesas);
-  
+
       // 2. Actualizar el mapa de asientos
       const nuevoMapaAsientos = this.seatMap.map(asiento => {
         const estaReservado = this.userSelectedSeatArray.some(
@@ -214,22 +224,22 @@ export class BookingComponent {
           estado: estaReservado ? 'ocupado' : asiento.estado
         };
       });
-  
+
       await this.masterSrv.actualizarMapaAsientos(
         this.scheduleId,
         nuevoMapaAsientos
       ).toPromise();
-  
+
       // 3. Cerrar modal y limpiar
       this.mostrarResumen = false;
       this.mostrarFormaPago = false;
       this.procesandoPago = false;
-      
+
       alert('¡Pago y reserva completados con éxito!');
       this.getScheduleDetailsById();
       this.userSelectedSeatArray = [];
       this.formSubmitted = false;
-  
+
     } catch (error) {
       console.error('Error en la reserva:', error);
       alert('Error al procesar el pago. Por favor intente nuevamente.');
@@ -239,4 +249,37 @@ export class BookingComponent {
   isSeatSelected(seatNo: number): boolean {
     return this.userSelectedSeatArray.some(item => item.seatNo === seatNo);
   }
+
+  // Métodos para formato de tarjeta
+formatCardNumber(event: any) {
+  let value = event.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+  let matches = value.match(/\d{4,16}/g);
+  let match = matches && matches[0] || '';
+  let parts = [];
+  
+  for (let i = 0, len = match.length; i < len; i += 4) {
+    parts.push(match.substring(i, i + 4));
+  }
+  
+  if (parts.length) {
+    this.datosTarjeta.numero = parts.join(' ');
+  } else {
+    this.datosTarjeta.numero = value;
+  }
+}
+
+formatExpiry(event: any) {
+  let value = event.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+  
+  if (value.length > 2) {
+    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+  }
+  
+  this.datosTarjeta.expiracion = value;
+}
+
+formatCVV(event: any) {
+  let value = event.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+  this.datosTarjeta.cvv = value;
+}
 }

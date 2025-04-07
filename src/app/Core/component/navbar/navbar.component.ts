@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { MasterService } from '../Service/master.service';
+import { MasterService } from '../../Service/master.service';
 import { RouterLink } from '@angular/router';
 
 

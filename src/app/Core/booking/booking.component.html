@@ -67,38 +67,45 @@
       </div>
       <div class="col-lg">
         @for (item of userSelectedSeatArray; track $index; let i = $index) {
-        <div class="row mb-3 border p-3 rounded">
+        <div class="row mb-3 border p-3 rounded passenger-card">
           <!-- Asiento -->
           <div class="col-md-2">
-            <label>Asiento</label>
-            <input disabled type="text" [(ngModel)]="item.seatNo" class="form-control" />
+            <label class="form-label fw-bold">Asiento</label>
+            <input disabled type="text" [(ngModel)]="item.seatNo" class="form-control bg-light" />
           </div>
-
+      
           <!-- Tipo de Documento -->
-          <div class="col-md-2">
-            <label>Tipo/Documento</label>
-            <div class="btn-group d-flex" role="group">
-              <button type="button" class="btn" [class.btn-primary]="item.tipoDocumento === 'dni'"
-                [class.btn-outline-primary]="item.tipoDocumento !== 'dni'" (click)="setDocumentType(i, 'dni')">
-                DNI
+          <div class="col-md-3">
+            <label class="form-label fw-bold">Tipo de Documento</label>
+            <div class="btn-group w-100" role="group">
+              <button type="button" class="btn" 
+                      [class.btn-warning]="item.tipoDocumento === 'dni'"
+                      [class.btn-outline-warning]="item.tipoDocumento !== 'dni'" 
+                      (click)="setDocumentType(i, 'dni')">
+                <i class="bi bi-card-text me-1"></i> DNI
               </button>
-              <button type="button" class="btn" [class.btn-primary]="item.tipoDocumento === 'pasaporte'"
-                [class.btn-outline-primary]="item.tipoDocumento !== 'pasaporte'"
-                (click)="setDocumentType(i, 'pasaporte')">
-                PASAPORTE/OTROS
+              <button type="button" class="btn" 
+                      [class.btn-warning]="item.tipoDocumento === 'pasaporte'"
+                      [class.btn-outline-warning]="item.tipoDocumento !== 'pasaporte'"
+                      (click)="setDocumentType(i, 'pasaporte')">
+                <i class="bi bi-passport me-1"></i> PASAPORTE/OTROS
               </button>
             </div>
           </div>
-          <div class="row mb-3">
-
+          
+          <div class="row mt-3">
+            <!-- Número de Documento -->
             <div class="col-md-4">
-              <label>N° Documento</label>
+              <label class="form-label fw-bold">N° Documento</label>
               <div class="input-group">
                 <input type="text" [(ngModel)]="item.numeroDocumento" class="form-control"
-                  [class.is-invalid]="!item.numeroDocumento && formSubmitted" maxlength="8" required />
+                       [class.is-invalid]="!item.numeroDocumento && formSubmitted" 
+                       [maxlength]="item.tipoDocumento === 'dni' ? 8 : null"
+                       [placeholder]="item.tipoDocumento === 'dni' ? 'Ingrese 8 dígitos' : 'Ingrese documento'"
+                       required />
                 @if (item.tipoDocumento === 'dni') {
-                <button class="btn btn-outline-primary" type="button" (click)="buscarDNI(i)"
-                  [disabled]="!item.numeroDocumento || item.numeroDocumento.length !== 8 || buscandoDNI">
+                <button class="btn btn-warning" type="button" (click)="buscarDNI(i)"
+                        [disabled]="!item.numeroDocumento || item.numeroDocumento.length !== 8 || buscandoDNI">
                   @if (buscandoDNI) {
                   <span class="spinner-border spinner-border-sm me-1"></span>
                   Buscando...
@@ -108,36 +115,59 @@
                 </button>
                 }
               </div>
-              @if (item.tipoDocumento === 'dni' && formSubmitted && !item.numeroDocumento) {
+              
+              @if (formSubmitted && !item.numeroDocumento) {
               <div class="invalid-feedback d-block">
                 El número de documento es requerido
               </div>
               }
               @if (item.tipoDocumento === 'dni' && item.numeroDocumento && item.numeroDocumento.length !== 8) {
               <div class="text-warning small mt-1">
-                El DNI debe tener 8 dígitos
+                El DNI debe tener exactamente 8 dígitos
+              </div>
+              }
+              @if (item.tipoDocumento === 'pasaporte' && item.numeroDocumento && item.numeroDocumento.length < 6) {
+              <div class="text-warning small mt-1">
+                El pasaporte debe tener al menos 6 caracteres
               </div>
               }
             </div>
-
-            <!-- Eliminar la sección de género -->
-
+      
             <!-- Nombre Completo -->
-            <div class="col-md-6">
-              <label>Nombre Completo</label>
+            <div class="col-md-4">
+              <label class="form-label fw-bold">Nombre Completo</label>
               <input type="text" [(ngModel)]="item.nombreCompleto" class="form-control"
-                [class.is-invalid]="!item.nombreCompleto && formSubmitted" [disabled]="item.tipoDocumento === 'dni'" />
+                     [class.is-invalid]="!item.nombreCompleto && formSubmitted" 
+                     [disabled]="item.tipoDocumento === 'dni' && item.nombreCompleto"
+                     placeholder="Nombre completo del pasajero" />
+              @if (!item.nombreCompleto && formSubmitted) {
+              <div class="invalid-feedback d-block">
+                El nombre completo es requerido
+              </div>
+              }
             </div>
-
+      
             <!-- Edad -->
             <div class="col-md-2">
-              <label>Edad</label>
+              <label class="form-label fw-bold mb-2">Edad</label>
               <input type="number" [(ngModel)]="item.edad" class="form-control"
-                [class.is-invalid]="!item.edad && formSubmitted" />
+                     [class.is-invalid]="(!item.edad && item.edad !== 0) && formSubmitted"
+                     min="0" max="120" placeholder="Edad" />
+              @if ((!item.edad && item.edad !== 0) && formSubmitted) {
+              <div class="invalid-feedback d-block">
+                La edad es requerida
+              </div>
+              }
             </div>
-
-
+            <div class="col-md-2 mt-3 d-flex align-items-end justify-content-end">
+              <button class="btn btn-sm" (click)="removePassenger(i)">
+                <i class="bi bi-trash"></i> Eliminar
+              </button>
+            </div>
           </div>
+          
+          <!-- Botón eliminar -->
+          
         </div>
         }
       </div>
@@ -158,116 +188,203 @@
   </div>
   <!-- Agrega esto al final del template, antes del cierre del container -->
   @if (mostrarResumen) {
-  <div class="modal fade show" style="display: block; background-color: rgba(0,0,0,0.5);" id="resumenModal">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Resumen de Compra</h5>
-          <button type="button" class="btn-close" (click)="mostrarResumen = false"></button>
-        </div>
-        <div class="modal-body">
-          <!-- Resumen de la compra -->
-          <div class="container py-3">
-            <div class="row">
-              <div class="col-md-7">
-                <h4 class="text-success">Total: S/. {{ scheduleData.precio * userSelectedSeatArray.length }}</h4>
-                <h4>Detalles del Viaje</h4>
-                <div class="pt-2">
-                  <p><strong>Salida:</strong> {{ scheduleData.terminalSalidaId.nombreTerminal }}</p>
-                  <p><strong>Llegada:</strong> {{ scheduleData.terminalLlegadaId.nombreTerminal }}</p>
-                  <p><strong>Fecha:</strong> {{ scheduleData.fechaDeSalida }}</p>
-                  <p><strong>Duración:</strong> {{ scheduleData.duracionEnHoras }} horas</p>
-                </div>
-
-                <div class="mt-4">
-                  <h5>Pasajeros</h5>
-                  @for (item of userSelectedSeatArray; track $index) {
-                  <div class="card mb-2">
+    <div class="modal fade show d-block" style="background-color: rgba(0,0,0,0.5);" id="resumenModal" tabindex="-1" role="dialog" aria-modal="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title fs-4">
+              <i class="bi bi-receipt me-2"></i>Resumen de Compra
+            </h5>
+            <button type="button" class="btn-close btn-close-white" (click)="mostrarResumen = false" aria-label="Close"></button>
+          </div>
+          
+          <div class="modal-body p-4">
+            <!-- Resumen de la compra -->
+            <div class="container-fluid">
+              <div class="row g-4">
+                <!-- Detalles del viaje y pasajeros -->
+                <div class="col-lg-7">
+                  <!-- Información del viaje -->
+                  <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-light">
+                      <h5 class="mb-0">
+                        <i class="bi bi-journey me-2 text-primary"></i>Detalles del Viaje
+                      </h5>
+                    </div>
                     <div class="card-body">
-                      <p><strong>Asiento:</strong> {{ item.seatNo }}</p>
-                      <p><strong>Nombre:</strong> {{ item.nombreCompleto || 'SIN NOMBRE' }}</p>
-                      <p><strong>Documento:</strong> {{ item.tipoDocumento }} {{ item.numeroDocumento }}</p>
-                      <p><strong>Precio:</strong> S/. {{ scheduleData.precio }}</p>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <p class="mb-2">
+                            <span class="badge bg-primary me-2"><i class="bi bi-geo-alt"></i></span>
+                            <strong>Salida:</strong> {{ scheduleData.terminalSalidaId.nombreTerminal }}
+                          </p>
+                          <p class="mb-2">
+                            <span class="badge bg-primary me-2"><i class="bi bi-calendar"></i></span>
+                            <strong>Fecha:</strong> {{ scheduleData.fechaDeSalida | date:'mediumDate' }}
+                          </p>
+                        </div>
+                        <div class="col-md-6">
+                          <p class="mb-2">
+                            <span class="badge bg-primary me-2"><i class="bi bi-geo-alt-fill"></i></span>
+                            <strong>Llegada:</strong> {{ scheduleData.terminalLlegadaId.nombreTerminal }}
+                          </p>
+                          <p class="mb-2">
+                            <span class="badge bg-primary me-2"><i class="bi bi-clock"></i></span>
+                            <strong>Duración:</strong> {{ scheduleData.duracionEnHoras }} horas
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  }
-                </div>
-              </div>
-
-              <div class="col-md-5">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Detalle de Pago</h5>
-                    <hr>
-                    <div class="d-flex justify-content-between mb-2">
-                      <span>Subtotal:</span>
-                      <span>S/. {{ (((scheduleData.precio * userSelectedSeatArray.length)/100)*82) }}</span>
+    
+                  <!-- Lista de pasajeros -->
+                  <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-light">
+                      <h5 class="mb-0">
+                        <i class="bi bi-people-fill me-2 text-primary"></i>Pasajeros ({{ userSelectedSeatArray.length }})
+                      </h5>
                     </div>
-                    <div class="d-flex justify-content-between mb-2">
-                      <span>Impuestos:</span>
-                      <span>S/. {{((scheduleData.precio * userSelectedSeatArray.length)/100)*18}}</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                      <span>Descuentos:</span>
-                      <span>S/. 0.00</span>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-between fw-bold">
-                      <span>Total a Pagar:</span>
-                      <span>S/. {{ (scheduleData.precio * userSelectedSeatArray.length) | number:'1.2-2'
-                        }}</span>
-                    </div>
-
-                    @if (!mostrarFormaPago) {
-                    <button class="btn btn-primary w-100 mt-3" (click)="mostrarFormaPago = true">
-                      Proceder al Pago
-                    </button>
-                    }
-
-                    @if (mostrarFormaPago) {
-                    <div class="mt-4">
-                      <h6>Información de Pago</h6>
-                      <div class="form-group mb-3">
-                        <label>Número de Tarjeta</label>
-                        <input type="text" class="form-control" placeholder="1234 5678 9012 3456"
-                          [(ngModel)]="datosTarjeta.numero" maxlength="16">
-                      </div>
-                      <div class="form-group mb-3">
-                        <label>Nombre en Tarjeta</label>
-                        <input type="text" class="form-control" placeholder="Nombre Completo"
-                          [(ngModel)]="datosTarjeta.nombre">
-                      </div>
-                      <div class="row">
-                        <div class="col-md-6 mb-3">
-                          <label>Fecha Expiración</label>
-                          <input type="text" class="form-control" placeholder="MM/AA"
-                            [(ngModel)]="datosTarjeta.expiracion">
+                    <div class="card-body p-0">
+                      <div class="list-group list-group-flush">
+                        @for (item of userSelectedSeatArray; track $index) {
+                        <div class="list-group-item">
+                          <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                              <h6 class="mb-1 fw-bold">Asiento {{ item.seatNo }}</h6>
+                              <p class="mb-1"><strong>Nombre:</strong> {{ item.nombreCompleto || 'SIN NOMBRE' }}</p>
+                              <p class="mb-1"><small class="text-muted">{{ item.tipoDocumento | uppercase }}: {{ item.numeroDocumento }}</small></p>
+                            </div>
+                            <div class="text-end">
+                              <span class="badge bg-success rounded-pill">S/. {{ scheduleData.precio | number:'1.2-2' }}</span>
+                            </div>
+                          </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                          <label>CVV</label>
-                          <input type="text" class="form-control" placeholder="123" [(ngModel)]="datosTarjeta.cvv"
-                            maxlength="3">
-                        </div>
-                      </div>
-                      <button class="btn btn-success w-100" (click)="confirmarPago()" [disabled]="procesandoPago">
-                        @if (procesandoPago) {
-                        <span class="spinner-border spinner-border-sm me-2"></span>
-                        Procesando...
-                        } @else {
-                        Confirmar Pago
                         }
-                      </button>
+                      </div>
                     </div>
-                    }
+                  </div>
+                </div>
+    
+                <!-- Detalle de pago -->
+                <div class="col-lg-5">
+                  <div class="card border-0 shadow-sm sticky-top" style="top: 20px;">
+                    <div class="card-header bg-light">
+                      <h5 class="mb-0">
+                        <i class="bi bi-credit-card me-2 text-primary"></i>Detalle de Pago
+                      </h5>
+                    </div>
+                    <div class="card-body">
+                      <!-- Resumen de precios -->
+                      <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-2">
+                          <span>Pasajes ({{ userSelectedSeatArray.length }}):</span>
+                          <span>S/. {{ (scheduleData.precio * userSelectedSeatArray.length) | number:'1.2-2' }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2 text-muted small">
+                          <span>Subtotal:</span>
+                          <span>S/. {{ (((scheduleData.precio * userSelectedSeatArray.length)/100)*82) | number:'1.2-2' }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2 text-muted small">
+                          <span>IGV (18%):</span>
+                          <span>S/. {{((scheduleData.precio * userSelectedSeatArray.length)/100)*18 | number:'1.2-2'}}</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between fw-bold fs-5">
+                          <span>Total a Pagar:</span>
+                          <span class="text-danger">S/. {{ (scheduleData.precio * userSelectedSeatArray.length) | number:'1.2-2' }}</span>
+                        </div>
+                      </div>
+    
+                      <!-- Forma de pago (condicional) -->
+                      @if (!mostrarFormaPago) {
+                      <button class="btn btn-primary w-100 py-2" (click)="mostrarFormaPago = true">
+                        <i class="bi bi-lock-fill me-2"></i>Proceder al Pago
+                      </button>
+                      } @else {
+                      <div class="payment-form">
+                        <h6 class="mb-3"><i class="bi bi-credit-card-2-front me-2"></i>Información de Pago</h6>
+                        
+                        <!-- Número de tarjeta con formato -->
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="cardNumber" 
+                                 placeholder="1234 5678 9012 3456" [(ngModel)]="datosTarjeta.numero" 
+                                 maxlength="19" (input)="formatCardNumber($event)"
+                                 [class.is-invalid]="formSubmitted && (!datosTarjeta.numero || datosTarjeta.numero.length < 16)">
+                          <label for="cardNumber">Número de Tarjeta</label>
+                          <div class="invalid-feedback">Ingrese un número de tarjeta válido</div>
+                        </div>
+                        
+                        <!-- Nombre en tarjeta -->
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="cardName" 
+                                 placeholder="Nombre Completo" [(ngModel)]="datosTarjeta.nombre"
+                                 [class.is-invalid]="formSubmitted && !datosTarjeta.nombre">
+                          <label for="cardName">Nombre en Tarjeta</label>
+                          <div class="invalid-feedback">Ingrese el nombre como aparece en la tarjeta</div>
+                        </div>
+                        
+                        <div class="row g-2">
+                          <!-- Fecha de expiración -->
+                          <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                              <input type="text" class="form-control" id="cardExpiry" 
+                                     placeholder="MM/AA" [(ngModel)]="datosTarjeta.expiracion"
+                                     maxlength="5" (input)="formatExpiry($event)"
+                                     [class.is-invalid]="formSubmitted && (!datosTarjeta.expiracion || datosTarjeta.expiracion.length < 5)">
+                              <label for="cardExpiry"> (MM/AA)</label>
+                              <div class="invalid-feedback">Formato MM/AA requerido</div>
+                            </div>
+                          </div>
+                          
+                          <!-- CVV -->
+                          <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                              <input type="password" class="form-control" id="cardCVV" 
+                                     placeholder="CVV" [(ngModel)]="datosTarjeta.cvv"
+                                     maxlength="4" (input)="formatCVV($event)"
+                                     [class.is-invalid]="formSubmitted && (!datosTarjeta.cvv || datosTarjeta.cvv.length < 3)">
+                              <label for="cardCVV">CVV</label>
+                              <div class="invalid-feedback">Código de seguridad requerido</div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                       
+                        <!-- Botón de confirmación -->
+                        <button class="btn btn-success w-100 py-2" (click)="confirmarPago()" [disabled]="procesandoPago">
+                          @if (procesandoPago) {
+                          <span class="spinner-border spinner-border-sm me-2"></span>
+                          Procesando Pago...
+                          } @else {
+                          <i class="bi bi-check-circle-fill me-2"></i>Confirmar Pago
+                          }
+                        </button>
+                        
+                        <div class="mt-3 text-center small text-muted">
+                          <i class="bi bi-lock-fill me-1"></i>Transacción segura SSL
+                        </div>
+                      </div>
+                      }
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          
+          <div class="modal-footer bg-light">
+            <button type="button" class="btn btn-outline-secondary" (click)="mostrarResumen = false">
+              <i class="bi bi-arrow-left me-1"></i>Volver
+            </button>
+            @if (mostrarFormaPago) {
+            <button type="button" class="btn btn-outline-primary" (click)="mostrarFormaPago = false">
+              <i class="bi bi-credit-card me-1"></i>Modificar Método de Pago
+            </button>
+            }
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  }
+    }
 </section>
 <app-footer />
