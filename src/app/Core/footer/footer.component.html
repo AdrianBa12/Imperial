@@ -1,0 +1,113 @@
+<footer class=" text-white pt-5">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Logo y Descripción -->
+            <div class="col-lg-4 col-md-6">
+                <div class="d-flex align-items-center mb-3">
+                    <img src="https://res.cloudinary.com/dd6ferfis/image/upload/v1728702908/LogoImperial_rtgf6p.png"
+                        alt="Imperial Buses" style="width: 150px; height: auto;">
+                </div>
+                <p class="text-muted">
+                    Imperial Buses - Tu transporte confiable a nivel nacional. Ofrecemos seguridad, comodidad y
+                    puntualidad en todos nuestros viajes.
+                </p>
+                <div class="social-icons mt-3">
+                    <a href="#" class="text-white me-3"><i class="bi bi-facebook fs-4"></i></a>
+                    <a href="#" class="text-white me-3"><i class="bi bi-twitter-x fs-4"></i></a>
+                    <a href="#" class="text-white me-3"><i class="bi bi-instagram fs-4"></i></a>
+                    <a href="#" class="text-white"><i class="bi bi-whatsapp fs-4"></i></a>
+                </div>
+            </div>
+
+            <!-- Enlaces Rápidos -->
+            <div class="col-lg-2 col-md-6">
+                <h5 class="text-uppercase text-warning mb-4">Enlaces Rápidos</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a [routerLink]="['/search']" class="text-white text-decoration-none">
+                            <i class="bi bi-arrow-right-short text-warning"></i> Buscar Rutas
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a [routerLink]="['/ofertas']" class="text-white text-decoration-none">
+                            <i class="bi bi-arrow-right-short text-warning"></i> Ofertas Especiales
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a [routerLink]="['/terminos']" class="text-white text-decoration-none">
+                            <i class="bi bi-arrow-right-short text-warning"></i> Términos y Condiciones
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a [routerLink]="['/preguntas']" class="text-white text-decoration-none">
+                            <i class="bi bi-arrow-right-short text-warning"></i> Preguntas Frecuentes
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Contacto -->
+            <div class="col-lg-3 col-md-6">
+                <h5 class="text-uppercase text-warning mb-4">Contacto</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-3 d-flex align-items-start">
+                        <i class="bi bi-geo-alt-fill text-warning me-2 mt-1"></i>
+                        <span>Av. Principal 123, Lima, Perú</span>
+                    </li>
+                    <li class="mb-3 d-flex align-items-center">
+                        <i class="bi bi-telephone-fill text-warning me-2"></i>
+                        <span>+51 987 654 321</span>
+                    </li>
+                    <li class="mb-3 d-flex align-items-center">
+                        <i class="bi bi-envelope-fill text-warning me-2"></i>
+                        <span>{{'contacto@imperialbuses.com'}}</span>
+                    </li>
+                    <li class="mb-3 d-flex align-items-center">
+                        <i class="bi bi-clock-fill text-warning me-2"></i>
+                        <span>Lunes a Domingo: 5:00 am - 10:00 pm</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Boletín Informativo -->
+            <div class="col-lg-3 col-md-6">
+                <h5 class="text-uppercase text-orange mb-4">Suscríbete</h5>
+                <p class="text-muted">
+                    Recibe ofertas exclusivas y novedades en tu correo.
+                </p>
+                <form class="mt-4">
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control  border-0 text-dark"
+                            placeholder="Tu correo" aria-label="Tu correo">
+                        <button class="btn btn-danger text-dark " type="button">
+                            <i class="bi bi-send-fill"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="mt-4">
+                    <h6 class="text-uppercase text-warning mb-3">Descarga nuestra App</h6>
+                    <div class="d-flex gap-2">
+                        <a href="#" class="btn btn-outline-light btn-sm p-2">
+                            <i class="bi bi-google-play me-1"></i> Play Store
+                        </a>
+                        <a href="#" class="btn btn-outline-light btn-sm p-2">
+                            <i class="bi bi-apple me-1"></i> App Store
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4 bg-warning">
+
+        <!-- Copyright y Métodos de Pago -->
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                <p class="mb-0 text-muted">
+                    © 2025 Imperial Buses. Todos los derechos reservados.
+                </p>
+            </div>
+           
+        </div>
+    </div>
+</footer>

@@ -1,16 +1,24 @@
-<div class="container">
+<ngb-carousel *ngIf="images.length > 0">
+  <ng-template ngbSlide *ngFor="let image of images">
+    <div class="picsum-img-wrapper">
+      <img [src]="image.url" [alt]="image.title" />
+    </div>
+
+  </ng-template>
+</ngb-carousel>
+<div>
   <header class="my-4">
     <h1 class="text-center">Buscar Ruta</h1>
   </header>
 
   <!-- Search Form -->
-  <section>
+  <section class="section">
     <div class="container mt-5 d-flex justify-content-center">
       <form class="search-form d-flex align-items-center shadow-lg">
         <div class="row w-100 text-white">
           <div class="col-md-3 d-flex align-items-center">
+            <span class="input-group-text">Origen :<i class="bi bi-bus-front"></i></span>
             <div class="input-group">
-              <span class="input-group-text"><i class="bi bi-bus-front"></i></span>
               <select class="form-select" name="fromLocation" [(ngModel)]="searchObj.fromLocation">
                 <option>Provincia de salida</option>
                 @for (item of locations$ | async; track $index) {
@@ -19,12 +27,9 @@
               </select>
             </div>
           </div>
-          <div class="col-md-1 text-center d-flex align-items-center justify-content-center">
-            <i class="bi bi-arrow-left-right fs-3"></i>
-          </div>
           <div class="col-md-3 d-flex align-items-center">
+            <span class="input-group-text">Llegada:<i class="bi bi-bus-front"></i></span>
             <div class="input-group">
-              <span class="input-group-text"><i class="bi bi-bus-front"></i></span>
               <select class="form-select" name="toLocation" [(ngModel)]="searchObj.toLocation">
                 <option>Provincia de llegada</option>
                 @for (item of locations$ | async; track $index) {
@@ -34,14 +39,18 @@
             </div>
           </div>
           <div class="col-md-3 d-flex align-items-center">
+            <span class="input-group-text">Fecha:<i class="bi bi-calendar"></i></span>
             <div class="input-group">
-              <span class="input-group-text"><i class="bi bi-calendar"></i></span>
-              <input type="date" class="form-control" name="travelDate" [(ngModel)]="searchObj.travelDate" placeholder="Date" />
+              <input type="date" class="form-control" name="travelDate" [(ngModel)]="searchObj.travelDate"
+                placeholder="Date" />
             </div>
+          </div>
+          <div class="col-md-1 text-center d-flex align-items-center justify-content-center">
+            <i class="bi bi-arrow-left-right fs-3"></i>
           </div>
           <div class="col-md-2 text-center">
             <button type="button" (click)="onSearch()" class="btn btn-light text-danger w-100">
-              BUSCAR BUSES
+              BUSCAR
             </button>
           </div>
         </div>
@@ -73,38 +82,36 @@
     @for (item of busList; track $index) {
     <div class="row">
       <div class="col-12">
-        <div class="card mb-3">
+        <div class="card border-danger border-3 mb-3">
           <div class="row g-0">
             <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
-              <h5 class="card-title">{{ item.nombreDeBus }}</h5>
-              <!-- <p class="card-text">{{ item.vendorName }}</p> -->
+              <h5 class="card-title">{{ item.claseDeBus }}</h5>
             </div>
             <div class="col-md-9">
               <div class="card-body row">
-                <div class="col-md-2">
-                  <p class="card-text"><strong>{{ item.fechaDeSalida | date : "hh:mm:ss" }}</strong></p>
-                  <p class="card-text">Partida</p>
+                <div class="col-md-3 "> <!-- Cambiado de 2 a 3 -->
+                  <p class="card-text fs-7">Salida:</p>
+                  <p class="card-text fs-3 text-danger">{{item.terminalSalidaId.provinciaId.nombreProvincia}}</p>
+                  <p class="card-text"><strong>{{ item.fechaDeSalida | date : "hh:mm" }}hr</strong></p>
+                  <p class="card-text">{{item.terminalSalidaId.nombreTerminal}}-{{item.terminalSalidaId.direccion}}</p>
                 </div>
                 <div class="col-md-2">
-                  <p class="card-text"><strong>16h</strong></p>
-                  <p class="card-text">Duracion</p>
+                  <p class="card-text">Duracion:</p>
+                  <p class="card-text"><strong>{{item.duracionEnHoras}}hrs</strong></p>
                 </div>
-                <div class="col-md-2">
-                  <p class="card-text"><strong>{{ item.fechaDeLlegada | date : "hh:mm:ss" }}</strong></p>
-                  <p class="card-text">Llegada</p>
-                  <p class="text-danger">{{ item.fechaDeLlegada | date : "dd:MM:yyyy" }}</p>
+                <div class="col-md-3"> <!-- Cambiado de 2 a 3 -->
+                  <p class="card-text fs-7">Llegada:</p>
+                  <p class="card-text fs-3 text-danger">{{item.terminalLlegadaId.provinciaId.nombreProvincia}}</p>
+                  <p class="card-text"><strong>{{ item.fechaDeLlegada | date : "hh:mm" }}hr</strong></p>
+                  <p class="card-text">{{item.terminalLlegadaId.nombreTerminal}}-{{item.terminalLlegadaId.direccion}}
+                  </p>
                 </div>
-                <div class="col-md-2">
-                  <p class="card-text"><strong>4.5</strong> ⭐</p>
-                  <p class="card-text">567 Comentarios</p>
-                </div>
-                <div class="col-md-2">
-                  <p class="card-text"><strong>PEN {{ item.precio }}</strong></p>
-                  <p class="card-text">{{ item.asientosDisponibles }} Asientos disponibles <br> de {{ item.totalDeAsiento }}</p>
-                </div>
-                <div class="col-md-2 text-end">
-                  <button class="btn btn-danger" [routerLink]="['/booking/', item.documentId]" routerLinkActive="router-link-active">
-                    Reservar
+                <div class="col-md-4 card-text text-center"> <!-- Cambiado de 2 a 4 -->
+                  <p class="card-text">Desde:</p>
+                  <p class="card-text fs-1"><strong>S/{{ item.precio }}</strong></p>
+                  <button class="btn btn-danger" [routerLink]="['/booking/', item.documentId]"
+                    routerLinkActive="router-link-active">
+                    SELECCIONAR ASIENTOS
                   </button>
                 </div>
               </div>

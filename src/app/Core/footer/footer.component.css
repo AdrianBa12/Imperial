@@ -1,0 +1,25 @@
+/* Estilos para el footer */
+footer {
+    background-color: var(--bs-warning);
+   
+}
+
+.social-icons a {
+    transition: all 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #fd7e14 !important;
+    transform: translateY(-3px);
+}
+
+footer a:hover {
+    color: #fd7e14 !important;
+    text-decoration: underline !important;
+}
+
+.btn-outline-light:hover {
+    background-color: #fd7e14;
+    border-color: #fd7e14;
+    color: #000 !important;
+}

@@ -1,89 +1,54 @@
-<nav
-  class="navbar navbar-expand-lg navbar-light bg-light"
-  style="background-color: rgb(171 177 183) !important"
->
+<nav class="navbar navbar-expand-lg navbar-light" >
   <div class="container">
     <a class="navbar-brand" href="#">
-      <img
-        src="https://res.cloudinary.com/dd6ferfis/image/upload/v1728702908/LogoImperial_rtgf6p.png"
-        alt="Logo"
-        style="width: 10rem"
-      />
+      <img src="https://res.cloudinary.com/dd6ferfis/image/upload/v1728702908/LogoImperial_rtgf6p.png" alt="Logo"
+        style="width: 10rem" />
     </a>
-    <div class="d-flex flex-column justify-content-center">
-      <span>Garantia</span>
-      <span class="font-weight-bold">+10 000 viajes</span>
-    </div>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-    >
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/search']"
-            ><i class="icon bi bi-bus"></i>Inicio</a
-          >
+          <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-bus"></i>Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/search']"
-            ><i class="icon bi bi-train"></i>Contactanos</a
-          >
+          <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-train"></i>Contactanos</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/search']"
-            ><i class="icon bi bi-airplane"></i>Ofertas</a
-          >
+          <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-airplane"></i>Ofertas</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/search']"
-            ><i class="icon bi bi-bus"></i>Buses</a
-          >
+          <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-bus"></i>Buses</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/search']"
-            ><i class="icon bi bi-ticket-perforated"></i>Seguimiento</a
-          >
+          <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-ticket-perforated"></i>Seguimiento</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/search']"
-            ><i class="icon bi bi-headset"></i>Ayuda?</a
-          >
+          <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-headset"></i>Ayuda?</a>
         </li>
         @if (loggedUserData) { @if (loggedUserData.role === 'Vendor') {
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/schedule']"
-            ><i class="icon bi bi-headset"></i>horario de autobuses</a
-          >
+          <a class="nav-link" [routerLink]="['/schedule']"><i class="icon bi bi-headset"></i>horario de autobuses</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/bookings']"
-            ><i class="icon bi bi-headset"></i>Reservas</a
-          >
+          <a class="nav-link" [routerLink]="['/bookings']"><i class="icon bi bi-headset"></i>Reservas</a>
         </li>
 
         }
         <li class="nav-item">
-          <a class="nav-link text-success"
-            ><i class="icon bi bi-person"></i>{{ loggedUserData.userName }}</a
-          >
+          <a class="nav-link text-success"><i class="icon bi bi-person"></i>{{ loggedUserData.userName }}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-danger" (click)="logoff()"
-            ><i class="icon bi bi-person"></i>Cerrar Sesion</a
-          >
+          <a class="nav-link text-danger" (click)="logoff()"><i class="icon bi bi-person"></i>Cerrar Sesion</a>
         </li>
 
         } @else {
 
         <li class="nav-item">
-          <a class="nav-link text-danger" (click)="openModel()"
-            ><i class="icon bi bi-person"></i> Iniciar Sesion/Crear cuenta</a
-          >
+          <a class="nav-link text-danger" (click)="openModel()"><i class="icon bi bi-person"></i> Iniciar Sesion/Crear
+            cuenta</a>
         </li>
 
         }
@@ -91,73 +56,125 @@
     </div>
   </div>
 </nav>
-<body class="p-3 m-0 border-0 bd-example m-0 border-0">
-  <!-- Example Code Start-->
-  <div id="carouselExampleIndicators" class="carousel slide">
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-    </div>
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: First slide" preserveAspectRatio="xMidYMid slice"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#555" dy=".3em">First slide</text></svg>
-      </div>
-      <div class="carousel-item">
-        <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Second slide" preserveAspectRatio="xMidYMid slice"><title>Placeholder</title><rect width="100%" height="100%" fill="#666"></rect><text x="50%" y="50%" fill="#444" dy=".3em">Second slide</text></svg>
-      </div>
-      <div class="carousel-item">
-        <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Third slide" preserveAspectRatio="xMidYMid slice"><title>Placeholder</title><rect width="100%" height="100%" fill="#555"></rect><text x="50%" y="50%" fill="#333" dy=".3em">Third slide</text></svg>
-      </div>
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div>
-  <!-- Example Code End -->
-</body>
+
 <router-outlet></router-outlet>
+<div class="container-fluid p-0">
+  <div class="position-relative">
+    <img 
+      src="https://res.cloudinary.com/dyelvotz0/image/upload/v1743984882/trailer_erugxr.jpg" 
+      class="img-fluid w-100" 
+      alt="Servicio de envíos"
+      style="height: 300px; object-fit: cover; object-position: center 60%;"
+    >
+    <div class="position-absolute top-0 start-0 h-100 w-100 d-flex align-items-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 col-md-8 p-4 text-white" >
+            <h2 class="h1 fw-bold mb-3">Envía sobres, paquetes y encomiendas</h2>
+            <p class="h5 mb-4">
+              a más de 50 agencias a nivel nacional todos los días del año de forma fácil y segura.
+            </p>
+            <button class="btn btn-warning px-4">Conoce más</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container my-5">
+  <div class="row">
+    <!-- Premier -->
+    <div class="col-md-6 mb-4">
+      <div class="card border-0 position-relative overflow-hidden">
+        <img 
+          src="https://res.cloudinary.com/dyelvotz0/image/upload/v1743985030/ChatGPT_Image_6_abr_2025_19_17_00_fcp5ss.png" 
+          class="card-img img-fluid" 
+          alt="Servicio Premier"
+          style="object-fit: cover; height: 300px;"
+        >
+        <div class="position-absolute bottom-0 start-0 p-3 text-white" style="background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%); width: 100%;">
+          <h3 class="fw-bold mb-1 fs-1">PREMIER</h3>
+          <p class="mb-0 d-none d-md-block">Asientos totalmente reclinables con pantallas individuales</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Presidencial -->
+    <div class="col-md-6 mb-4">
+      <div class="card border-0 position-relative overflow-hidden">
+        <img 
+          src="https://res.cloudinary.com/dyelvotz0/image/upload/v1743984980/ChatGPT_Image_6_abr_2025_19_15_05_m1cwg0.png" 
+          class="card-img img-fluid" 
+          alt="Servicio Presidencial"
+          style="object-fit: cover; height: 300px;"
+        >
+        <div class="position-absolute bottom-0 start-0 p-3 text-white" style="background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%); width: 100%;">
+          <h3 class="fw-bold mb-1 fs-1">PRESIDENCIAL</h3>
+          <p class="mb-0 d-none d-md-block">Espacio amplio con servicio a bordo premium</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ejecutivo -->
+    <div class="col-md-6 mb-4">
+      <div class="card border-0 position-relative overflow-hidden">
+        <img 
+          src="https://res.cloudinary.com/dyelvotz0/image/upload/v1743984979/ChatGPT_Image_6_abr_2025_19_16_04_m45oml.png" 
+          class="card-img img-fluid" 
+          alt="Servicio Ejecutivo"
+          style="object-fit: cover; height: 300px;"
+        >
+        <div class="position-absolute bottom-0 start-0 p-3 text-white" style="background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%); width: 100%;">
+          <h3 class="fw-bold mb-1 fs-1">EJECUTIVO</h3>
+          <p class="mb-0 d-none d-md-block">Comodidad profesional con espacio para trabajar</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Económico -->
+    <div class="col-md-6 mb-4">
+      <div class="card border-0 position-relative overflow-hidden">
+        <img 
+          src="https://res.cloudinary.com/dyelvotz0/image/upload/v1743984979/ChatGPT_Image_6_abr_2025_19_16_04_m45oml.png" 
+          class="card-img img-fluid" 
+          alt="Servicio Económico"
+          style="object-fit: cover; height: 300px;"
+        >
+        <div class="position-absolute bottom-0 start-0 p-3 text-white" style="background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%); width: 100%;">
+          <h3 class="fw-bold mb-1 fs-1">ECONÓMICO</h3>
+          <p class="mb-0 d-none d-md-block">Viaja cómodo al mejor precio</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer/>
 
 <!-- The Modal -->
 <div class="modal" id="myModal">
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- Modal Header -->
-      
+
 
       <!-- Modal body -->
       <div class="modal-body">
         @if(isLoginForm){
 
-          <h4 class="modal-title mb-4">Iniciar Sesion</h4>
+        <h4 class="modal-title mb-4">Iniciar Sesion</h4>
 
         <form>
           <!-- Email input -->
           <div data-mdb-input-init class="form-outline mb-4">
-            <input
-              type="email"
-              name="userName"
-              [(ngModel)]="loginObj.userName"
-              id="form2Example1"
-              class="form-control"
-            />
-            <label class="form-label" for="form2Example1">Email</label>
+            <input type="email" name="userName" [(ngModel)]="loginObj.userName" id="form2Example1"
+              class="form-control" />
+            <label class="form-label" for="form2Example1">Email o Usuario</label>
           </div>
 
           <!-- Password input -->
           <div data-mdb-input-init class="form-outline mb-4">
-            <input
-              type="password"
-              name="password"
-              [(ngModel)]="loginObj.password"
-              id="form2Example2"
-              class="form-control"
-            />
+            <input type="password" name="password" [(ngModel)]="loginObj.password" id="form2Example2"
+              class="form-control" />
             <label class="form-label" for="form2Example2">Contraseña</label>
           </div>
 
@@ -166,27 +183,16 @@
             <div class="col d-flex justify-content-center">
               <!-- Checkbox -->
               <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="form2Example31"
-                  checked
-                />
+                <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
                 <label class="form-check-label" for="form2Example31">
-                  Recordar 
+                  Recordar
                 </label>
               </div>
             </div>
           </div>
 
           <!-- Submit button -->
-          <button
-            type="button"
-            (click)="onLogin()"
-            data-mdb-ripple-init
-            class="btn btn-primary btn-block mb-4"
-          >
+          <button type="button" (click)="onLogin()" data-mdb-ripple-init class="btn btn-primary btn-block mb-4">
             Iniciar Sesion
           </button>
 
@@ -197,69 +203,39 @@
         </form>
 
         }@else {
-          <h4 class="modal-title mb-4">Crear cuenta</h4>
+        <h4 class="modal-title mb-4">Crear cuenta</h4>
         <form>
           <!-- Email input -->
           <div data-mdb-input-init class="form-outline mb-4">
-            <input
-              type="email"
-              id="form2Example1"
-              name="emailId"
-              [(ngModel)]="registerObj.emailId"
-              class="form-control"
-            />
+            <input type="email" id="form2Example1" name="emailId" [(ngModel)]="registerObj.emailId"
+              class="form-control" />
             <label class="form-label" for="form2Example1">Email </label>
           </div>
 
           <div data-mdb-input-init class="form-outline mb-4">
-            <input
-              type="email"
-              name="userName"
-              [(ngModel)]="registerObj.userName"
-              class="form-control"
-            />
+            <input type="email" name="userName" [(ngModel)]="registerObj.userName" class="form-control" />
             <label class="form-label" for="form2Example1">Nombre de usuario</label>
           </div>
 
           <div data-mdb-input-init class="form-outline mb-4">
-            <input
-              type="email"
-              name="fullName"
-              [(ngModel)]="registerObj.fullName"
-              class="form-control"
-            />
+            <input type="email" name="fullName" [(ngModel)]="registerObj.fullName" class="form-control" />
             <label class="form-label" for="form2Example1">Nombre Completo</label>
           </div>
 
           <!-- Password input -->
           <div data-mdb-input-init class="form-outline mb-4">
-            <input
-              type="password"
-              name="password"
-              [(ngModel)]="registerObj.password"
-              class="form-control"
-            />
+            <input type="password" name="password" [(ngModel)]="registerObj.password" class="form-control" />
             <label class="form-label" for="form2Example2">Contraseña</label>
           </div>
 
           <!-- Submit button -->
-          <button
-            type="button"
-            (click)="onRegister()"
-            data-mdb-button-init
-            data-mdb-ripple-init
-            class="btn btn-primary btn-block mb-4"
-          >
+          <button type="button" (click)="onRegister()" data-mdb-button-init data-mdb-ripple-init
+            class="btn btn-primary btn-block mb-4">
             Crear cuenta
           </button>
 
-          <button
-            type="button"
-            (click)="onVendorRegister()"
-            data-mdb-button-init
-            data-mdb-ripple-init
-            class="btn btn-primary btn-block mb-4"
-          >
+          <button type="button" (click)="onVendorRegister()" data-mdb-button-init data-mdb-ripple-init
+            class="btn btn-primary btn-block mb-4">
             Registrar Proveedor
           </button>
 
@@ -274,12 +250,7 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-danger"
-          data-bs-dismiss="modal"
-          (click)="closeModel()"
-        >
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="closeModel()">
           Cerrar
         </button>
       </div>

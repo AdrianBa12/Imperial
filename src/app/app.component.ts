@@ -4,10 +4,11 @@ import { RouterOutlet } from '@angular/router';
 import { MasterService } from './Core/Service/master.service';
 import { RouterLink } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FooterComponent } from "./Core/footer/footer.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, FormsModule, RouterLink,NgbModule],
+  imports: [RouterOutlet, FormsModule, RouterLink, NgbModule, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
