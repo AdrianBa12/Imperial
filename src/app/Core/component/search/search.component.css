@@ -1,3 +1,115 @@
 .search-form{
     background-color: var(--bs-warning);
 }
+
+.route-search-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.search-hero {
+  background: linear-gradient(135deg, #ffa600 0%, #fcff49 100%);
+  margin-bottom: -2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.search-form-section {
+  position: relative;
+  z-index: 2;
+  margin-top: -3rem;
+}
+
+.search-form {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.swap-btn {
+  width: 45px;
+  height: 45px;
+  margin-top: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.swap-btn:hover {
+  transform: rotate(180deg);
+  background-color: #e9ecef;
+}
+
+.search-btn {
+  transition: all 0.3s ease;
+}
+
+.search-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bus-type-badge {
+  transition: all 0.3s ease;
+}
+
+.hover-shadow {
+  transition: all 0.3s ease;
+}
+
+.hover-shadow:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.route-line {
+  height: 2px;
+  background-color: #dee2e6;
+  position: relative;
+}
+
+.line-dots {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  top: -4px;
+}
+
+.start-dot {
+  background-color: #ff9100;
+  left: 0;
+}
+
+.end-dot {
+  background-color: #ff0000;
+  right: 0;
+}
+
+.line-path {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  right: 10px;
+  bottom: 0;
+  background-color: #ff0000;
+  width: calc(100% - 20px);
+}
+
+@media (max-width: 768px) {
+  .search-form-section {
+    margin-top: 0;
+  }
+  
+  .search-hero {
+    padding: 2rem 0;
+  }
+  
+  .search-form {
+    padding: 1.5rem !important;
+  }
+  
+  .departure-info, .arrival-info {
+    margin-bottom: 1.5rem;
+  }
+  
+  .price-action {
+    margin-top: 1.5rem;
+  }
+}

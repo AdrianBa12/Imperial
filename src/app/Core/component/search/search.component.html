@@ -37,7 +37,7 @@
 
               <!-- Intercambiar origen/destino -->
               <div class="col-md-1 d-flex align-items-center justify-content-center">
-                <button type="button" class="btn btn-outline-primary rounded-circle p-2 swap-btn">
+                <button type="button" class="btn btn-outline-danger rounded-circle p-2 swap-btn">
                   <i class="bi bi-arrow-left-right fs-5"></i>
                 </button>
               </div>
@@ -75,7 +75,7 @@
               <!-- Botón Buscar -->
               <div class="col-md-2 d-flex align-items-end">
                 <button type="button" (click)="onSearch()" 
-                        class="btn btn-primary btn-lg w-100 py-2 search-btn">
+                        class="btn btn-danger btn-lg w-100 py-2 search-btn">
                   <i class="bi bi-search me-2"></i>Buscar
                 </button>
               </div>
@@ -103,7 +103,7 @@
 
       <!-- Mensaje si no hay resultados -->
       @if (busList.length === 0 && !isLoading) {
-      <div class="alert alert-info rounded-3 shadow-sm">
+      <div class="alert alert-warning rounded-3 shadow-sm">
         <div class="d-flex align-items-center">
           <i class="bi bi-info-circle-fill me-3 fs-4"></i>
           <div>
@@ -148,7 +148,7 @@
                 <div class="col-md-2 text-center">
                   <div class="duration-container bg-light rounded-3 p-3">
                     <p class="text-muted small mb-1">Duración</p>
-                    <h5 class="fw-bold text-primary">{{item.duracionEnHoras}} hrs</h5>
+                    <h5 class="fw-bold text-danger">{{item.duracionEnHoras}} hrs</h5>
                     <div class="route-line my-2 position-relative">
                       <div class="line-dots start-dot"></div>
                       <div class="line-path"></div>
@@ -176,7 +176,7 @@
                 <div class="col-md-2">
                   <div class="price-action text-center">
                     <p class="text-muted small mb-1">Precio desde</p>
-                    <h3 class="fw-bold text-success mb-3">S/{{ item.precio }}</h3>
+                    <h3 class="fw-bold fs-1 mb-3">S/{{ item.precio }}</h3>
                     <button class="btn btn-danger rounded-pill px-4 w-100" 
                             [routerLink]="['/booking/', item.documentId]">
                       Seleccionar <i class="bi bi-arrow-right ms-2"></i>
@@ -193,117 +193,3 @@
   </section>
 </div>
 
-<!-- Estilos personalizados -->
-<style>
-.route-search-container {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.search-hero {
-  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-  margin-bottom: -2rem;
-  position: relative;
-  z-index: 1;
-}
-
-.search-form-section {
-  position: relative;
-  z-index: 2;
-  margin-top: -3rem;
-}
-
-.search-form {
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-}
-
-.swap-btn {
-  width: 45px;
-  height: 45px;
-  margin-top: 1.5rem;
-  transition: all 0.3s ease;
-}
-
-.swap-btn:hover {
-  transform: rotate(180deg);
-  background-color: #e9ecef;
-}
-
-.search-btn {
-  transition: all 0.3s ease;
-}
-
-.search-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.bus-type-badge {
-  transition: all 0.3s ease;
-}
-
-.hover-shadow {
-  transition: all 0.3s ease;
-}
-
-.hover-shadow:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
-}
-
-.route-line {
-  height: 2px;
-  background-color: #dee2e6;
-  position: relative;
-}
-
-.line-dots {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  position: absolute;
-  top: -4px;
-}
-
-.start-dot {
-  background-color: #dc3545;
-  left: 0;
-}
-
-.end-dot {
-  background-color: #28a745;
-  right: 0;
-}
-
-.line-path {
-  position: absolute;
-  top: 0;
-  left: 10px;
-  right: 10px;
-  bottom: 0;
-  background-color: #0d6efd;
-  width: calc(100% - 20px);
-}
-
-@media (max-width: 768px) {
-  .search-form-section {
-    margin-top: 0;
-  }
-  
-  .search-hero {
-    padding: 2rem 0;
-  }
-  
-  .search-form {
-    padding: 1.5rem !important;
-  }
-  
-  .departure-info, .arrival-info {
-    margin-bottom: 1.5rem;
-  }
-  
-  .price-action {
-    margin-top: 1.5rem;
-  }
-}
-</style>

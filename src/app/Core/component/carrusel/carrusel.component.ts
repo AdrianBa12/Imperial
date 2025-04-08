@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { NgbCarousel, NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCarousel, NgbCarouselConfig, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-carrusel',
-  imports: [NgbCarousel,CommonModule],
+  imports: [NgbCarousel,CommonModule,NgbCarouselModule],
   templateUrl: './carrusel.component.html',
   styleUrl: './carrusel.component.css'
 })
