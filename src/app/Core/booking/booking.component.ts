@@ -7,7 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from "../component/navbar/navbar.component";
 import { FooterComponent } from "../component/footer/footer.component";
-
+import { jsPDF } from 'jspdf';
 @Component({
   selector: 'app-booking',
   standalone: true,
@@ -182,15 +182,17 @@ export class BookingComponent {
       if (!this.datosTarjeta.numero || !this.datosTarjeta.nombre ||
         !this.datosTarjeta.expiracion || !this.datosTarjeta.cvv) {
         alert('Por favor complete todos los datos de la tarjeta');
+        this.procesandoPago = false;
         return;
       }
 
       const loggedUserDat = localStorage.getItem('redBusUser');
       if (!loggedUserDat) {
         alert('Por favor inicie sesión para realizar una reserva');
+        
         return;
       }
-
+      
       const loggData = JSON.parse(loggedUserDat);
       const userId = loggData.userId;
 
@@ -218,7 +220,7 @@ export class BookingComponent {
       await this.masterSrv.actualizarMapaAsientos(this.scheduleId, nuevoMapaAsientos).toPromise();
 
       // 3. Generar comprobante
-      this.generarComprobante(reservasCreadas);
+      this.generarPDF(reservasCreadas);
 
       // 4. Limpiar y resetear
       this.mostrarResumen = false;
@@ -234,195 +236,100 @@ export class BookingComponent {
       this.procesandoPago = false;
     }
   }
+  
+ 
 
-  generarComprobante(reservas: any[]) {
-    const fecha = new Date().toLocaleDateString('es-PE', { 
-      day: '2-digit', 
-      month: 'long', 
-      year: 'numeric' 
-    });
-    
-    const horaSalida = new Date(this.scheduleData.fechaDeSalida).toLocaleTimeString('es-PE', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+generarPDF(reservas: any[]) {
+  const doc = new jsPDF();
 
-    const contenido = `
-      <!DOCTYPE html>
-      <html lang="es">
-      <head>
-        <meta charset="UTF-8">
-        <title>Comprobante de Reserva - Imperial</title>
-        <style>
-          body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; color: #333; }
-          .container { max-width: 800px; margin: 0 auto; }
-          .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #2563eb; }
-          .logo { max-width: 180px; margin-bottom: 10px; }
-          .title { color: #1e3a8a; font-size: 28px; font-weight: 700; margin: 10px 0; }
-          .subtitle { color: #6b7280; font-size: 16px; margin-bottom: 5px; }
-          .section { margin-bottom: 25px; }
-          .section-title { 
-            background-color: #2563eb; 
-            color: white; 
-            padding: 10px 15px; 
-            font-weight: 600; 
-            border-radius: 5px 5px 0 0;
-            margin-bottom: 0;
-          }
-          .card { border: 1px solid #e5e7eb; border-radius: 5px; overflow: hidden; }
-          .card-body { padding: 15px; }
-          .info-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-          .info-table td { padding: 10px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
-          .info-table tr:last-child td { border-bottom: none; }
-          .passenger-table { width: 100%; border-collapse: collapse; }
-          .passenger-table th { 
-            background-color: #f3f4f6; 
-            padding: 12px; 
-            text-align: left; 
-            font-weight: 600;
-            color: #374151;
-          }
-          .passenger-table td { padding: 12px; border-bottom: 1px solid #e5e7eb; }
-          .total { 
-            font-size: 20px; 
-            font-weight: 700; 
-            text-align: right; 
-            margin-top: 25px;
-            color: #1e3a8a;
-          }
-          .footer { 
-            margin-top: 40px; 
-            text-align: center; 
-            font-size: 14px; 
-            color: #6b7280;
-            padding-top: 20px;
-            border-top: 1px dashed #d1d5db;
-          }
-          .badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-            background-color: #e0e7ff;
-            color: #1e40af;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <div class="title">COMPROBANTE DE RESERVA</div>
-            <div class="subtitle">${fecha}</div>
-          </div>
+  // Logo (opcional)
+  // doc.addImage(logoData, 'JPEG', 10, 10, 50, 20);
 
-          <div class="section">
-            <h3 class="section-title">INFORMACIÓN DEL VIAJE</h3>
-            <div class="card">
-              <div class="card-body">
-                <table class="info-table">
-                  <tr>
-                    <td><strong>Ruta:</strong></td>
-                    <td>${this.scheduleData.terminalSalidaId.nombreTerminal} → ${this.scheduleData.terminalLlegadaId.nombreTerminal}</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Fecha y Hora:</strong></td>
-                    <td>${new Date(this.scheduleData.fechaDeSalida).toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long' })} a las ${horaSalida}</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Duración:</strong></td>
-                    <td>${this.scheduleData.duracionEnHoras} horas</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Bus:</strong></td>
-                    <td>${this.busInfo.claseDeBus} (${this.busInfo.placaBus})</td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-          </div>
+  // Título
+  doc.setFontSize(18);
+  doc.setTextColor(40);
+  doc.text('COMPROBANTE DE COMPRA', 105, 20, { align: 'center' });
 
-          <div class="section">
-            <h3 class="section-title">DETALLE DE PASAJEROS</h3>
-            <div class="card">
-              <div class="card-body">
-                <table class="passenger-table">
-                  <thead>
-                    <tr>
-                      <th>Asiento</th>
-                      <th>Nombre</th>
-                      <th>Documento</th>
-                      <th>Precio</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${this.userSelectedSeatArray.map(pasajero => `
-                      <tr>
-                        <td><span class="badge">${pasajero.seatNo}</span></td>
-                        <td>${pasajero.nombreCompleto || 'SIN NOMBRE'}</td>
-                        <td>${pasajero.tipoDocumento.toUpperCase()} ${pasajero.numeroDocumento}</td>
-                        <td>S/. ${this.scheduleData.precio.toFixed(2)}</td>
-                      </tr>
-                    `).join('')}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+  // Fecha
+  doc.setFontSize(12);
+  doc.text(`Fecha: ${new Date().toLocaleDateString('es-PE')}`, 105, 30, { align: 'center' });
 
-          <div class="total">
-            TOTAL A PAGAR: S/. ${(this.scheduleData.precio * this.userSelectedSeatArray.length).toFixed(2)}
-          </div>
+  // Información del viaje
+  doc.setFontSize(14);
+  doc.text('INFORMACIÓN DEL VIAJE', 14, 45);
+  doc.setFontSize(12);
+  doc.text(`Ruta: ${this.scheduleData.terminalSalidaId.nombreTerminal} - ${this.scheduleData.terminalLlegadaId.nombreTerminal}`, 14, 55);
+  doc.text(`Fecha: ${this.scheduleData.fechaDeSalida}`, 14, 65);
+  doc.text(`Hora: ${this.scheduleData.horaDeSalida}`, 14, 75);
+  doc.text(`Duración: ${this.scheduleData.duracionEnHoras} horas`, 14, 85);
 
-          <div class="footer">
-            <p>Gracias por viajar con Imperial. Presente este comprobante al abordar el bus.</p>
-            <p>Número de reserva: ${reservas[0]?.data?.bookingId || 'N/A'}</p>
-            <p>Para consultas o cambios, contacte a nuestro servicio al cliente.</p>
-          </div>
-        </div>
-      </body>
-      </html>
-    `;
+  // Pasajeros
+  doc.setFontSize(14);
+  doc.text('DETALLE DE PASAJEROS', 14, 100);
 
-    const blob = new Blob([contenido], { type: 'text/html' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `Reserva_Imperial_${new Date().toISOString().slice(0, 10)}.html`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
+  // Cabecera de tabla
+  doc.setFillColor(245, 245, 245);
+  doc.rect(14, 105, 180, 10, 'F');
+  doc.setTextColor(0);
+  doc.setFontSize(12);
+  doc.text('Asiento', 20, 112);
+  doc.text('Nombre', 50, 112);
+  doc.text('Documento', 120, 112);
+  doc.text('Precio', 170, 112);
 
-    alert('¡Reserva completada con éxito! Se ha descargado el comprobante.');
+  // Contenido de tabla
+  let y = 120;
+  this.userSelectedSeatArray.forEach(pasajero => {
+    doc.text(pasajero.seatNo.toString(), 20, y);
+    doc.text(pasajero.nombreCompleto || 'SIN NOMBRE', 50, y);
+    doc.text(`${pasajero.tipoDocumento} ${pasajero.numeroDocumento}`, 120, y);
+    doc.text(`S/. ${this.scheduleData.precio.toFixed(2)}`, 170, y);
+    y += 10;
+  });
+
+  // Total
+  doc.setFontSize(16);
+  doc.text(`TOTAL: S/. ${(this.scheduleData.precio * this.userSelectedSeatArray.length).toFixed(2)}`, 14, y + 20);
+
+  // Pie de página
+  doc.setFontSize(10);
+  doc.text('Gracias por su compra. Presente este comprobante al abordar el bus.', 105, y + 40, { align: 'center' });
+  doc.text(`Número de reserva: ${reservas[0]?.data?.bookingId || 'N/A'}`, 105, y + 45, { align: 'center' });
+
+  // Guardar PDF
+  doc.save(`Comprobante_${new Date().toISOString().slice(0, 10)}.pdf`);
+
+  // Mostrar alerta de éxito
+  alert('¡Pago y reserva completados con éxito! Se ha descargado el comprobante.');
+}
+
+
+isSeatSelected(seatNo: number): boolean {
+  return this.userSelectedSeatArray.some(item => item.seatNo === seatNo);
+}
+
+formatCardNumber(event: any) {
+  let value = event.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+  let matches = value.match(/\d{4,16}/g);
+  let match = matches && matches[0] || '';
+  let parts = [];
+
+  for (let i = 0, len = match.length; i < len; i += 4) {
+    parts.push(match.substring(i, i + 4));
   }
 
-  isSeatSelected(seatNo: number): boolean {
-    return this.userSelectedSeatArray.some(item => item.seatNo === seatNo);
-  }
+  this.datosTarjeta.numero = parts.length ? parts.join(' ') : value;
+}
 
-  formatCardNumber(event: any) {
-    let value = event.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-    let matches = value.match(/\d{4,16}/g);
-    let match = matches && matches[0] || '';
-    let parts = [];
-    
-    for (let i = 0, len = match.length; i < len; i += 4) {
-      parts.push(match.substring(i, i + 4));
-    }
-    
-    this.datosTarjeta.numero = parts.length ? parts.join(' ') : value;
+formatExpiry(event: any) {
+  let value = event.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+  if (value.length > 2) {
+    value = value.substring(0, 2) + '/' + value.substring(2, 4);
   }
+  this.datosTarjeta.expiracion = value;
+}
 
-  formatExpiry(event: any) {
-    let value = event.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-    if (value.length > 2) {
-      value = value.substring(0, 2) + '/' + value.substring(2, 4);
-    }
-    this.datosTarjeta.expiracion = value;
-  }
-
-  formatCVV(event: any) {
-    this.datosTarjeta.cvv = event.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-  }
+formatCVV(event: any) {
+  this.datosTarjeta.cvv = event.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+}
 }
