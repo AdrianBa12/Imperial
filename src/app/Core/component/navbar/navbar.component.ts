@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { MasterService } from '../../Service/master.service';
 import { RouterLink } from '@angular/router';
-
+import { CommonModule } from '@angular/common';
 
 import { FormsModule } from '@angular/forms';
 
@@ -9,7 +9,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, FormsModule, NgbModule],
+  imports: [RouterLink, FormsModule, NgbModule,CommonModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })

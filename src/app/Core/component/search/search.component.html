@@ -1,118 +1,309 @@
-
-<div>
-  <header class="my-4">
-    <h1 class="text-center">Buscar Ruta</h1>
-  </header>
-
-  <!-- Search Form -->
-  <section class="section">
-    <div class="container mt-5 d-flex justify-content-center">
-      <form class="search-form d-flex align-items-center shadow-lg">
-        <div class="row w-100 text-white">
-          <div class="col-md-3 d-flex align-items-center">
-            <span class="input-group-text">Origen :<i class="bi bi-bus-front"></i></span>
-            <div class="input-group">
-              <select class="form-select" name="fromLocation" [(ngModel)]="searchObj.fromLocation">
-                <option>Provincia de salida</option>
-                @for (item of locations$ | async; track $index) {
-                <option [value]="item.id">{{ item.nombreProvincia }}</option>
-                }
-              </select>
-            </div>
-          </div>
-          <div class="col-md-3 d-flex align-items-center">
-            <span class="input-group-text">Llegada:<i class="bi bi-bus-front"></i></span>
-            <div class="input-group">
-              <select class="form-select" name="toLocation" [(ngModel)]="searchObj.toLocation">
-                <option>Provincia de llegada</option>
-                @for (item of locations$ | async; track $index) {
-                <option [value]="item.id">{{ item.nombreProvincia }}</option>
-                }
-              </select>
-            </div>
-          </div>
-          <div class="col-md-3 d-flex align-items-center">
-            <span class="input-group-text">Fecha:<i class="bi bi-calendar"></i></span>
-            <div class="input-group">
-              <input type="date" class="form-control" name="travelDate" [(ngModel)]="searchObj.travelDate"
-                placeholder="Date" />
-            </div>
-          </div>
-          <div class="col-md-1 text-center d-flex align-items-center justify-content-center">
-            <i class="bi bi-arrow-left-right fs-3"></i>
-          </div>
-          <div class="col-md-2 text-center">
-            <button type="button" (click)="onSearch()" class="btn btn-light text-danger w-100">
-              BUSCAR
-            </button>
-          </div>
+<div class="route-search-container">
+  <!-- Hero Section con título -->
+  <section class="search-hero bg-primary text-white py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+          <h1 class="display-5 fw-bold mb-3">Encuentra tu viaje perfecto</h1>
+          <p class="lead">Compara y reserva buses entre más de 50 destinos nacionales</p>
         </div>
-      </form>
+      </div>
     </div>
   </section>
 
-  <!-- Buses List -->
-  <section id="buses-list" class="my-4">
-    <h2>Buses Disponibles</h2>
+  <!-- Formulario de búsqueda mejorado -->
+  <section class="search-form-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <form class="search-form shadow-lg rounded-3 p-4 bg-white">
+            <div class="row g-3 align-items-center">
+              <!-- Origen -->
+              <div class="col-md-3">
+                <label for="fromLocation" class="form-label fw-medium text-secondary mb-1">
+                  <i class="bi bi-geo-alt-fill text-primary me-2"></i>Origen
+                </label>
+                <div class="input-group">
+                  <select class="form-select form-select-lg border-2 py-2" 
+                          id="fromLocation" name="fromLocation" 
+                          [(ngModel)]="searchObj.fromLocation">
+                    <option value="" disabled selected>Seleccione origen</option>
+                    @for (item of locations$ | async; track $index) {
+                    <option [value]="item.id">{{ item.nombreProvincia }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
 
-    <!-- Mensaje de advertencia si no hay buses -->
-    @if (busList.length === 0 && !isLoading) {
-    <div class="alert alert-warning">
-      No se encontraron buses para la ruta seleccionada.
-    </div>
-    }
+              <!-- Intercambiar origen/destino -->
+              <div class="col-md-1 d-flex align-items-center justify-content-center">
+                <button type="button" class="btn btn-outline-primary rounded-circle p-2 swap-btn">
+                  <i class="bi bi-arrow-left-right fs-5"></i>
+                </button>
+              </div>
 
-    <!-- Spinner de carga -->
-    @if (isLoading) {
-    <div class="text-center">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Cargando...</span>
+              <!-- Destino -->
+              <div class="col-md-3">
+                <label for="toLocation" class="form-label fw-medium text-secondary mb-1">
+                  <i class="bi bi-geo-alt text-primary me-2"></i>Destino
+                </label>
+                <div class="input-group">
+                  <select class="form-select form-select-lg border-2 py-2" 
+                          id="toLocation" name="toLocation" 
+                          [(ngModel)]="searchObj.toLocation">
+                    <option value="" disabled selected>Seleccione destino</option>
+                    @for (item of locations$ | async; track $index) {
+                    <option [value]="item.id">{{ item.nombreProvincia }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+
+              <!-- Fecha -->
+              <div class="col-md-3">
+                <label for="travelDate" class="form-label fw-medium text-secondary mb-1">
+                  <i class="bi bi-calendar3 text-primary me-2"></i>Fecha
+                </label>
+                <div class="input-group">
+                  <input type="date" class="form-control form-control-lg border-2 py-2" 
+                         id="travelDate" name="travelDate" 
+                         [(ngModel)]="searchObj.travelDate" 
+                         >
+                </div>
+              </div>
+
+              <!-- Botón Buscar -->
+              <div class="col-md-2 d-flex align-items-end">
+                <button type="button" (click)="onSearch()" 
+                        class="btn btn-primary btn-lg w-100 py-2 search-btn">
+                  <i class="bi bi-search me-2"></i>Buscar
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-    }
+  </section>
 
-    <!-- Lista de buses -->
-    @for (item of busList; track $index) {
-    <div class="row">
-      <div class="col-12">
-        <div class="card border-danger border-3 mb-3">
-          <div class="row g-0">
-            <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
-              <h5 class="card-title">{{ item.claseDeBus }}</h5>
-            </div>
-            <div class="col-md-9">
-              <div class="card-body row">
-                <div class="col-md-3 "> <!-- Cambiado de 2 a 3 -->
-                  <p class="card-text fs-7">Salida:</p>
-                  <p class="card-text fs-3 text-danger">{{item.terminalSalidaId.provinciaId.nombreProvincia}}</p>
-                  <p class="card-text"><strong>{{ item.fechaDeSalida | date : "hh:mm" }}hr</strong></p>
-                  <p class="card-text">{{item.terminalSalidaId.nombreTerminal}}-{{item.terminalSalidaId.direccion}}</p>
+  <!-- Resultados de búsqueda -->
+  <section class="search-results my-5">
+    <div class="container">
+      <h2 class="fw-bold mb-4">Buses Disponibles</h2>
+
+      <!-- Spinner de carga -->
+      @if (isLoading) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-3 text-muted">Buscando los mejores viajes para ti...</p>
+      </div>
+      }
+
+      <!-- Mensaje si no hay resultados -->
+      @if (busList.length === 0 && !isLoading) {
+      <div class="alert alert-info rounded-3 shadow-sm">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-info-circle-fill me-3 fs-4"></i>
+          <div>
+            <h5 class="alert-heading mb-1">No encontramos buses para esta ruta</h5>
+            <p class="mb-0">Intenta con otras fechas o destinos cercanos</p>
+          </div>
+        </div>
+      </div>
+      }
+
+      <!-- Lista de buses -->
+      <div class="row g-4">
+        @for (item of busList; track $index) {
+        <div class="col-12">
+          <div class="card border-0 shadow-sm hover-shadow transition-all">
+            <div class="card-body p-4">
+              <div class="row align-items-center">
+                <!-- Info del bus -->
+                <div class="col-md-2 text-center">
+                  <div class="bus-type-badge bg-primary bg-opacity-10 text-primary rounded-3 p-3 mb-2">
+                    <i class="bi bi-bus-front fs-1"></i>
+                  </div>
+                  <h5 class="mb-0 fw-semibold">{{ item.claseDeBus }}</h5>
                 </div>
+
+                <!-- Detalles de salida -->
+                <div class="col-md-3">
+                  <div class="departure-info">
+                    <p class="text-muted small mb-1">Salida</p>
+                    <h4 class="text-danger fw-bold mb-1">{{item.terminalSalidaId.provinciaId.nombreProvincia}}</h4>
+                    <div class="d-flex align-items-center mb-1">
+                      <i class="bi bi-clock-history text-muted me-2"></i>
+                      <span class="fw-medium">{{ item.fechaDeSalida | date : "hh:mm a" }}</span>
+                    </div>
+                    <p class="small text-muted mb-0">
+                      {{item.terminalSalidaId.nombreTerminal}} - {{item.terminalSalidaId.direccion}}
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Duración -->
+                <div class="col-md-2 text-center">
+                  <div class="duration-container bg-light rounded-3 p-3">
+                    <p class="text-muted small mb-1">Duración</p>
+                    <h5 class="fw-bold text-primary">{{item.duracionEnHoras}} hrs</h5>
+                    <div class="route-line my-2 position-relative">
+                      <div class="line-dots start-dot"></div>
+                      <div class="line-path"></div>
+                      <div class="line-dots end-dot"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Detalles de llegada -->
+                <div class="col-md-3">
+                  <div class="arrival-info">
+                    <p class="text-muted small mb-1">Llegada</p>
+                    <h4 class="text-danger fw-bold mb-1">{{item.terminalLlegadaId.provinciaId.nombreProvincia}}</h4>
+                    <div class="d-flex align-items-center mb-1">
+                      <i class="bi bi-clock-history text-muted me-2"></i>
+                      <span class="fw-medium">{{ item.fechaDeLlegada | date : "hh:mm a" }}</span>
+                    </div>
+                    <p class="small text-muted mb-0">
+                      {{item.terminalLlegadaId.nombreTerminal}} - {{item.terminalLlegadaId.direccion}}
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Precio y acción -->
                 <div class="col-md-2">
-                  <p class="card-text">Duracion:</p>
-                  <p class="card-text"><strong>{{item.duracionEnHoras}}hrs</strong></p>
-                </div>
-                <div class="col-md-3"> <!-- Cambiado de 2 a 3 -->
-                  <p class="card-text fs-7">Llegada:</p>
-                  <p class="card-text fs-3 text-danger">{{item.terminalLlegadaId.provinciaId.nombreProvincia}}</p>
-                  <p class="card-text"><strong>{{ item.fechaDeLlegada | date : "hh:mm" }}hr</strong></p>
-                  <p class="card-text">{{item.terminalLlegadaId.nombreTerminal}}-{{item.terminalLlegadaId.direccion}}
-                  </p>
-                </div>
-                <div class="col-md-4 card-text text-center"> <!-- Cambiado de 2 a 4 -->
-                  <p class="card-text">Desde:</p>
-                  <p class="card-text fs-1"><strong>S/{{ item.precio }}</strong></p>
-                  <button class="btn btn-danger" [routerLink]="['/booking/', item.documentId]"
-                    routerLinkActive="router-link-active">
-                    SELECCIONAR ASIENTOS
-                  </button>
+                  <div class="price-action text-center">
+                    <p class="text-muted small mb-1">Precio desde</p>
+                    <h3 class="fw-bold text-success mb-3">S/{{ item.precio }}</h3>
+                    <button class="btn btn-danger rounded-pill px-4 w-100" 
+                            [routerLink]="['/booking/', item.documentId]">
+                      Seleccionar <i class="bi bi-arrow-right ms-2"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        }
       </div>
     </div>
-    }
   </section>
 </div>
+
+<!-- Estilos personalizados -->
+<style>
+.route-search-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.search-hero {
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  margin-bottom: -2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.search-form-section {
+  position: relative;
+  z-index: 2;
+  margin-top: -3rem;
+}
+
+.search-form {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.swap-btn {
+  width: 45px;
+  height: 45px;
+  margin-top: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.swap-btn:hover {
+  transform: rotate(180deg);
+  background-color: #e9ecef;
+}
+
+.search-btn {
+  transition: all 0.3s ease;
+}
+
+.search-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bus-type-badge {
+  transition: all 0.3s ease;
+}
+
+.hover-shadow {
+  transition: all 0.3s ease;
+}
+
+.hover-shadow:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.route-line {
+  height: 2px;
+  background-color: #dee2e6;
+  position: relative;
+}
+
+.line-dots {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  top: -4px;
+}
+
+.start-dot {
+  background-color: #dc3545;
+  left: 0;
+}
+
+.end-dot {
+  background-color: #28a745;
+  right: 0;
+}
+
+.line-path {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  right: 10px;
+  bottom: 0;
+  background-color: #0d6efd;
+  width: calc(100% - 20px);
+}
+
+@media (max-width: 768px) {
+  .search-form-section {
+    margin-top: 0;
+  }
+  
+  .search-hero {
+    padding: 2rem 0;
+  }
+  
+  .search-form {
+    padding: 1.5rem !important;
+  }
+  
+  .departure-info, .arrival-info {
+    margin-bottom: 1.5rem;
+  }
+  
+  .price-action {
+    margin-top: 1.5rem;
+  }
+}
+</style>
