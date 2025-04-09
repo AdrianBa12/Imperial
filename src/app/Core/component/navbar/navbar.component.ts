@@ -1,17 +1,16 @@
 import { Component, inject } from '@angular/core';
-import { MasterService } from '../../Service/master.service';
-import { RouterLink } from '@angular/router';
+import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
-import { FormsModule } from '@angular/forms';
-
+import { RouterLink } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MasterService } from '../../Service/master.service';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, FormsModule, NgbModule,CommonModule],
+  standalone: true,
+  imports: [RouterLink, FormsModule, NgbModule, CommonModule],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css'
+  styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
   isLoginForm: boolean = true;
@@ -20,7 +19,7 @@ export class NavbarComponent {
 
   loginObj: any = {
     userName: '',
-    password: '',
+    password: ''
   };
 
   registerObj: any = {
@@ -33,7 +32,7 @@ export class NavbarComponent {
     password: '',
     projectName: '',
     refreshToken: '',
-    refreshTokenExpiryTime: new Date(),
+    refreshTokenExpiryTime: new Date()
   };
 
   constructor() {
@@ -47,37 +46,27 @@ export class NavbarComponent {
     const model = document.getElementById('myModal');
     if (model != null) {
       model.style.display = 'block';
+      model.classList.add('show');
     }
   }
+
   closeModel() {
     const model = document.getElementById('myModal');
     if (model != null) {
       model.style.display = 'none';
+      model.classList.remove('show');
     }
-  }
-  onVendorRegister() {
-    this.masterSrv.onRegisterVendor(this.registerObj).subscribe((res: any) => {
-      if (res.result) {
-        alert('Vendor Created Sucess');
-        this.closeModel();
-      } else {
-        alert(res.message);
-      }
-    });
   }
 
   onRegister() {
-    // Asegurar que los nombres de campos coincidan
-    this.registerObj = {
-      userName: this.registerObj.userName,
-      emailId: this.registerObj.emailId,
-      password: this.registerObj.password,
-      fullName: this.registerObj.fullName
-    };
+    if (!this.registerObj.emailId || !this.registerObj.userName || 
+        !this.registerObj.fullName || !this.registerObj.password) {
+      alert('Por favor completa todos los campos requeridos');
+      return;
+    }
 
     this.masterSrv.onRegisterUser(this.registerObj).subscribe({
       next: (res: any) => {
-        // La respuesta de Strapi tiene estructura diferente
         const userData = {
           userId: res.user?.id,
           userName: res.user?.username,
@@ -99,12 +88,16 @@ export class NavbarComponent {
     });
   }
 
-  // En app.component.ts
   onLogin() {
-    this.masterSrv.onLogin(this.loginObj).subscribe(
-      (res: any) => {
+    if (!this.loginObj.userName || !this.loginObj.password) {
+      alert('Por favor ingresa tu usuario y contraseña');
+      return;
+    }
+
+    this.masterSrv.onLogin(this.loginObj).subscribe({
+      next: (res: any) => {
         const userData = {
-          userId: res.user.id, // Esto debe ser el ID correcto
+          userId: res.user.id,
           userName: res.user.username,
           emailId: res.user.email,
           fullName: res.user.fullName,
@@ -116,10 +109,10 @@ export class NavbarComponent {
         this.loggedUserData = userData;
         this.closeModel();
       },
-      (error) => {
-        alert('Error de login: ' + error.message);
+      error: (error) => {
+        alert('Error de login: ' + (error.error?.message || 'Credenciales incorrectas'));
       }
-    );
+    });
   }
 
   logoff() {

@@ -189,7 +189,7 @@ export class BookingComponent {
       const loggedUserDat = localStorage.getItem('redBusUser');
       if (!loggedUserDat) {
         alert('Por favor inicie sesión para realizar una reserva');
-        
+        this.procesandoPago = false;
         return;
       }
       

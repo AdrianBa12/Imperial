@@ -11,21 +11,21 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-bus"></i>Inicio</a>
+                    <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-bus"></i>Nuestros servicios</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-train"></i>Contactanos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-airplane"></i>Ofertas</a>
+                    <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-airplane"></i>Encomiendas</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-bus"></i>Buses</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" [routerLink]="['/search']"><i
                             class="icon bi bi-ticket-perforated"></i>Seguimiento</a>
-                </li>
+                </li> -->
                 <li class="nav-item">
                     <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-headset"></i>Ayuda?</a>
                 </li>
@@ -60,115 +60,153 @@
         </div>
     </div>
 </nav>
-<div class="modal" id="myModal">
-    <div class="modal-dialog">
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <!-- Modal Header -->
-
-
-            <!-- Modal body -->
-            <div class="modal-body">
-                @if(isLoginForm){
-
-                <h4 class="modal-title mb-4">Iniciar Sesion</h4>
-
-                <form>
-                    <!-- Email input -->
-                    <div data-mdb-input-init class="form-outline mb-4">
-                        <input type="email" name="userName" [(ngModel)]="loginObj.userName" id="form2Example1"
-                            class="form-control" />
-                        <label class="form-label" for="form2Example1">Email o Usuario</label>
-                    </div>
-
-                    <!-- Password input -->
-                    <div data-mdb-input-init class="form-outline mb-4">
-                        <input type="password" name="password" [(ngModel)]="loginObj.password" id="form2Example2"
-                            class="form-control" />
-                        <label class="form-label" for="form2Example2">Contraseña</label>
-                    </div>
-
-                    <!-- 2 column grid layout for inline styling -->
-                    <div class="row mb-4">
-                        <div class="col d-flex justify-content-center">
-                            <!-- Checkbox -->
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
-                                <label class="form-check-label" for="form2Example31">
-                                    Recordar
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Submit button -->
-                    <button type="button" (click)="onLogin()" data-mdb-ripple-init
-                        class="btn btn-primary btn-block mb-4">
-                        Iniciar Sesion
-                    </button>
-
-                    <!-- Register buttons -->
-                    <div class="text-center">
-                        <p>No eres miembro? <a class="text-danger" (click)="isLoginForm = false">Registrate</a></p>
-                    </div>
-                </form>
-
-                }@else {
-                <h4 class="modal-title mb-4">Crear cuenta</h4>
-                <form>
-                    <!-- Email input -->
-                    <div data-mdb-input-init class="form-outline mb-4">
-                        <input type="email" id="form2Example1" name="emailId" [(ngModel)]="registerObj.emailId"
-                            class="form-control" />
-                        <label class="form-label" for="form2Example1">Email </label>
-                    </div>
-
-                    <div data-mdb-input-init class="form-outline mb-4">
-                        <input type="email" name="userName" [(ngModel)]="registerObj.userName" class="form-control" />
-                        <label class="form-label" for="form2Example1">Nombre de usuario</label>
-                    </div>
-
-                    <div data-mdb-input-init class="form-outline mb-4">
-                        <input type="email" name="fullName" [(ngModel)]="registerObj.fullName" class="form-control" />
-                        <label class="form-label" for="form2Example1">Nombre Completo</label>
-                    </div>
-
-                    <!-- Password input -->
-                    <div data-mdb-input-init class="form-outline mb-4">
-                        <input type="password" name="password" [(ngModel)]="registerObj.password"
-                            class="form-control" />
-                        <label class="form-label" for="form2Example2">Contraseña</label>
-                    </div>
-
-                    <!-- Submit button -->
-                    <button type="button" (click)="onRegister()" data-mdb-button-init data-mdb-ripple-init
-                        class="btn btn-primary btn-block mb-4">
-                        Crear cuenta
-                    </button>
-
-                    <button type="button" (click)="onVendorRegister()" data-mdb-button-init data-mdb-ripple-init
-                        class="btn btn-primary btn-block mb-4">
-                        Registrar Proveedor
-                    </button>
-
-                    <!-- Register buttons -->
-                    <div class="text-center">
-                        <p>Ya eres miembro? <a class="text-danger" (click)="isLoginForm = true">Iniciar Sesion</a></p>
-                    </div>
-                </form>
-
+            <div class="modal-header bg-danger text-white">
+                @if(isLoginForm) {
+                    <h5 class="modal-title" id="authModalLabel">Iniciar Sesión</h5>
+                } @else {
+                    <h5 class="modal-title" id="authModalLabel">Crear Cuenta</h5>
                 }
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" (click)="closeModel()"></button>
             </div>
 
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="closeModel()">
-                    Cerrar
-                </button>
+            <div class="modal-body">
+                @if(isLoginForm) {
+                <form #loginForm="ngForm" (ngSubmit)="onLogin()">
+                    <!-- Email/Usuario input -->
+                    <div class="mb-3">
+                        <label for="loginUsername" class="form-label">Email o Usuario</label>
+                        <input type="text" class="form-control" id="loginUsername" name="userName" 
+                               [(ngModel)]="loginObj.userName" #userName="ngModel" required
+                               [class.is-invalid]="userName.invalid && (userName.dirty || userName.touched)">
+                        @if(userName.invalid && (userName.dirty || userName.touched)) {
+                            <div class="invalid-feedback">
+                                Por favor ingresa tu email o usuario
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Password input -->
+                    <div class="mb-3">
+                        <label for="loginPassword" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="loginPassword" name="password" 
+                               [(ngModel)]="loginObj.password" #password="ngModel" required minlength="6"
+                               [class.is-invalid]="password.invalid && (password.dirty || password.touched)">
+                        @if(password.errors?.['required'] && (password.dirty || password.touched)) {
+                            <div class="invalid-feedback">
+                                Por favor ingresa tu contraseña
+                            </div>
+                        }
+                        @if(password.errors?.['minlength'] && (password.dirty || password.touched)) {
+                            <div class="invalid-feedback">
+                                La contraseña debe tener al menos 6 caracteres
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Remember me checkbox -->
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">Recordar sesión</label>
+                    </div>
+
+                    <!-- Submit button -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">
+                            Iniciar Sesión
+                        </button>
+                    </div>
+
+                    <!-- Register link -->
+                    <div class="text-center mt-3">
+                        <p>¿No tienes cuenta? <a href="#" class="text-primary fw-bold" (click)="isLoginForm = false">Regístrate</a></p>
+                    </div>
+                </form>
+                } @else {
+                <form #registerForm="ngForm" (ngSubmit)="onRegister()">
+                    <!-- Email input -->
+                    <div class="mb-3">
+                        <label for="registerEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="registerEmail" name="emailId" 
+                               [(ngModel)]="registerObj.emailId" #emailId="ngModel" required email
+                               [class.is-invalid]="emailId.invalid && (emailId.dirty || emailId.touched)">
+                        @if(emailId.errors?.['required'] && (emailId.dirty || emailId.touched)) {
+                            <div class="invalid-feedback">
+                                Por favor ingresa tu email
+                            </div>
+                        }
+                        @if(emailId.errors?.['email'] && (emailId.dirty || emailId.touched)) {
+                            <div class="invalid-feedback">
+                                Por favor ingresa un email válido
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Username input -->
+                    <div class="mb-3">
+                        <label for="registerUsername" class="form-label">Nombre de usuario</label>
+                        <input type="text" class="form-control" id="registerUsername" name="userName" 
+                               [(ngModel)]="registerObj.userName" #regUserName="ngModel" required minlength="4"
+                               [class.is-invalid]="regUserName.invalid && (regUserName.dirty || regUserName.touched)">
+                        @if(regUserName.errors?.['required'] && (regUserName.dirty || regUserName.touched)) {
+                            <div class="invalid-feedback">
+                                Por favor ingresa un nombre de usuario
+                            </div>
+                        }
+                        @if(regUserName.errors?.['minlength'] && (regUserName.dirty || regUserName.touched)) {
+                            <div class="invalid-feedback">
+                                El nombre de usuario debe tener al menos 4 caracteres
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Full name input -->
+                    <div class="mb-3">
+                        <label for="registerFullname" class="form-label">Nombre Completo</label>
+                        <input type="text" class="form-control" id="registerFullname" name="fullName" 
+                               [(ngModel)]="registerObj.fullName" #fullName="ngModel" required
+                               [class.is-invalid]="fullName.invalid && (fullName.dirty || fullName.touched)">
+                        @if(fullName.errors?.['required'] && (fullName.dirty || fullName.touched)) {
+                            <div class="invalid-feedback">
+                                Por favor ingresa tu nombre completo
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Password input -->
+                    <div class="mb-3">
+                        <label for="registerPassword" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="registerPassword" name="password" 
+                               [(ngModel)]="registerObj.password" #regPassword="ngModel" required minlength="8"
+                               [class.is-invalid]="regPassword.invalid && (regPassword.dirty || regPassword.touched)">
+                        @if(regPassword.errors?.['required'] && (regPassword.dirty || regPassword.touched)) {
+                            <div class="invalid-feedback">
+                                Por favor ingresa una contraseña
+                            </div>
+                        }
+                        @if(regPassword.errors?.['minlength'] && (regPassword.dirty || regPassword.touched)) {
+                            <div class="invalid-feedback">
+                                La contraseña debe tener al menos 8 caracteres
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Submit button -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">
+                            Crear Cuenta
+                        </button>
+                    </div>
+
+                    <!-- Login link -->
+                    <div class="text-center mt-3">
+                        <p>¿Ya tienes cuenta? <a  class="text-primary fw-bold" (click)="isLoginForm = true">Inicia Sesión</a></p>
+                    </div>
+                </form>
+                }
             </div>
         </div>
     </div>
 </div>
-
-
-
-
