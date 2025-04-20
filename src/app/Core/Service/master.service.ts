@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 })
 export class MasterService {
 
-  private apiURL: string = 'https://devoted-apparel-741955edca.strapiapp.com/api/';
-private authURL: string = 'https://devoted-apparel-741955edca.strapiapp.com/api/auth/';
+  private apiURL: string = 'https://automatic-festival-37ec7cc8d8.strapiapp.com/api/';
+private authURL: string = 'https://automatic-festival-37ec7cc8d8.strapiapp.com/api/auth/';
   private apiPeruToken = '25222079ce57429371cf6d908d8b283966aad65f8e64caf50c2fff09a5727ce6';
   private apiUrl = 'https://apiperu.dev/api/dni/';
   constructor(private http: HttpClient) { }
