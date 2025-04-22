@@ -19,15 +19,9 @@
                 <li class="nav-item">
                     <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-airplane"></i>Encomiendas</a>
                 </li>
-                <!-- <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-bus"></i>Buses</a>
-                </li>
+            
                 <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['/search']"><i
-                            class="icon bi bi-ticket-perforated"></i>Seguimiento</a>
-                </li> -->
-                <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['/search']"><i class="icon bi bi-headset"></i>Ayuda?</a>
+                    <a class="nav-link" [routerLink]="['/incidencias']"><i class="icon bi bi-headset"></i>Incidencias?</a>
                 </li>
                 @if (loggedUserData) { @if (loggedUserData.role === 'Vendor') {
                 <li class="nav-item">

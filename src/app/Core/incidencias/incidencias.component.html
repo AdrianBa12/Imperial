@@ -1,0 +1,114 @@
+<app-navbar/>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6">
+        
+        <form #incidenciaForm="ngForm" (ngSubmit)="onSubmitIncidencia()" class="mt-4 p-3 shadow-sm rounded-3 bg-white">
+          <h2 class="mb-4 text-center">Reportar Incidencia</h2>
+          
+          <!-- Título de la incidencia -->
+          <div class="mb-3">
+            <label for="titulo" class="form-label fw-bold">Título de la incidencia</label>
+            <input 
+                type="text" 
+                class="form-control form-control-lg" 
+                id="titulo" 
+                name="titulo" 
+                [(ngModel)]="incidenciaObj.titulo" 
+                #titulo="ngModel" 
+                required
+                [class.is-invalid]="titulo.invalid && (titulo.dirty || titulo.touched)"
+                placeholder="Ej: Asiento dañado, Retraso en ruta..."
+            >
+            @if(titulo.errors?.['required'] && (titulo.dirty || titulo.touched)) {
+                <div class="invalid-feedback">
+                    Por favor ingresa un título para la incidencia.
+                </div>
+            }
+          </div>
+  
+          <!-- Correo -->
+          <div class="mb-3">
+            <label for="correo" class="form-label fw-bold">Correo electrónico</label>
+            <input 
+                type="email" 
+                class="form-control form-control-lg" 
+                id="correo" 
+                name="correo" 
+                [(ngModel)]="incidenciaObj.correo" 
+                #correo="ngModel" 
+                required
+                email
+                [class.is-invalid]="correo.invalid && (correo.dirty || correo.touched)"
+                placeholder="tu@email.com"
+            >
+            @if(correo.errors?.['required'] && (correo.dirty || correo.touched)) {
+                <div class="invalid-feedback">
+                    Por favor ingresa tu correo electrónico.
+                </div>
+            }
+            @if(correo.errors?.['email'] && (correo.dirty || correo.touched)) {
+                <div class="invalid-feedback">
+                    Ingresa un correo electrónico válido.
+                </div>
+            }
+          </div>
+  
+          <!-- Descripción -->
+          <div class="mb-3">
+            <label for="descripcion" class="form-label fw-bold">Descripción detallada</label>
+            <small class="text-muted d-block mb-2">Incluye datos del viaje si es relevante (número de bus, ruta, etc.)</small>
+            <textarea 
+                class="form-control form-control-lg" 
+                id="descripcion" 
+                name="descripcion" 
+                rows="5"
+                [(ngModel)]="incidenciaObj.descripcion" 
+                #descripcion="ngModel" 
+                required
+                [class.is-invalid]="descripcion.invalid && (descripcion.dirty || descripcion.touched)"
+                placeholder="Describe el problema con detalles..."
+            ></textarea>
+            @if(descripcion.errors?.['required'] && (descripcion.dirty || descripcion.touched)) {
+                <div class="invalid-feedback">
+                    Por favor describe la incidencia.
+                </div>
+            }
+          </div>
+  
+          <!-- Fecha del incidente -->
+          <div class="mb-4">
+            <label for="fechaDelIncidente" class="form-label fw-bold">Fecha y hora del incidente</label>
+            <input 
+                type="datetime-local" 
+                class="form-control form-control-lg" 
+                id="fechaDelIncidente" 
+                name="fechaDelIncidente" 
+                [(ngModel)]="incidenciaObj.fechaDelIncidente" 
+                #fechaDelIncidente="ngModel" 
+                required
+                [class.is-invalid]="fechaDelIncidente.invalid && (fechaDelIncidente.dirty || fechaDelIncidente.touched)"
+            >
+            @if(fechaDelIncidente.errors?.['required'] && (fechaDelIncidente.dirty || fechaDelIncidente.touched)) {
+                <div class="invalid-feedback">
+                    Por favor selecciona la fecha del incidente.
+                </div>
+            }
+          </div>
+  
+          <!-- Botón de envío -->
+          <div class="d-grid">
+            <button 
+                type="submit" 
+                class="btn btn-primary btn-lg py-3" 
+                [disabled]="incidenciaForm.invalid"
+            >
+                <i class="bi bi-send-fill me-2"></i> Reportar Incidencia
+            </button>
+          </div>
+        </form>
+        
+    </div>
+</div>
+</div>
+<app-footer/>
