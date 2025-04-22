@@ -64,9 +64,9 @@
                 <td class="fw-bold">{{ encomienda.montoCobrar | currency:'PEN':'symbol':'1.2-2' }}</td>
                 <td>
                   <span class="badge" [ngClass]="{
-                    'bg-info': encomienda.estadoDeEntrega === 'En proceso',
+                    'bg-secondary': encomienda.estadoDeEntrega === 'En proceso',
                     'bg-success': encomienda.estadoDeEntrega === 'Entregado',
-                    'bg-secondary': encomienda.estadoDeEntrega === 'Pendiente'
+                    'bg-info': encomienda.estadoDeEntrega === 'En camino'
                   }">
                     {{ encomienda.estadoDeEntrega }}
                   </span>
