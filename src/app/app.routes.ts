@@ -8,6 +8,7 @@ import { ScheduleComponent } from './Core/admin/schedule/schedule.component';
 import { BookingsComponent } from './Core/admin/bookings/bookings.component';
 import { LandingComponent } from './Core/landing/landing.component';
 import { IncidenciasComponent } from './Core/incidencias/incidencias.component';
+import { EncomiendaComponent } from './Core/encomienda/encomienda.component';
 export const routes: Routes = [
   // { path: '', redirectTo: 'buscar', pathMatch: 'full' },
   // { path: 'buscar', component: BusquedaBusesComponent },
@@ -19,4 +20,5 @@ export const routes: Routes = [
   { path: 'schedule', component: ScheduleComponent },
   { path: 'bookings', component: BookingsComponent },
   { path: 'incidencias', component: IncidenciasComponent },
+  { path: 'encomienda', component: EncomiendaComponent },
 ];

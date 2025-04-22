@@ -1,14 +1,33 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+interface Encomienda {
+  id: number;
+  documentId: string;
+  documentoEmisor: string;
+  NombreCompletoEmisor: string;
+  celularEmisor: string;
+  documentoReceptor: string;
+  nombreCompletoReceptor: string;
+  celularReceptor: string;
+  estadoPago: string;
+  pesoKg: number;
+  montoCobrar: number;
+  estadoDeEntrega: string;
+  // ... otros campos que necesites
+}
 
+interface ApiResponse {
+  data: Encomienda[];
+  meta: any;
+}
 @Injectable({
   providedIn: 'root',
 })
 export class MasterService {
 
   private apiURL: string = 'https://automatic-festival-37ec7cc8d8.strapiapp.com/api/';
-private authURL: string = 'https://automatic-festival-37ec7cc8d8.strapiapp.com/api/auth/';
+  private authURL: string = 'https://automatic-festival-37ec7cc8d8.strapiapp.com/api/auth/';
   private apiPeruToken = '25222079ce57429371cf6d908d8b283966aad65f8e64caf50c2fff09a5727ce6';
   private apiUrl = 'https://apiperu.dev/api/dni/';
   constructor(private http: HttpClient) { }
@@ -102,24 +121,31 @@ private authURL: string = 'https://automatic-festival-37ec7cc8d8.strapiapp.com/a
   }
   // En master.service.ts
 
-// Método para crear reservas
-// En master.service.ts
-crearReserva(datosReserva: any): Observable<any> {
-  return this.http.post(`${this.apiURL}reservas`, {
-    data: {
-      ...datosReserva,
-      // Asegurar que el usuario se envíe como relación
-      usuario: datosReserva.usuario
-    }
-  });
-}
+  // Método para crear reservas
+  // En master.service.ts
+  crearReserva(datosReserva: any): Observable<any> {
+    return this.http.post(`${this.apiURL}reservas`, {
+      data: {
+        ...datosReserva,
+        // Asegurar que el usuario se envíe como relación
+        usuario: datosReserva.usuario
+      }
+    });
+  }
 
-// Método para actualizar el mapa de asientos
-actualizarMapaAsientos(documentId: string, mapaAsientos: any[]): Observable<any> {
-  return this.http.put(`${this.apiURL}horario-de-autobuses/${documentId}`, {
-    data: {
-      mapaDeAsientos: mapaAsientos
-    }
-  });
-}
+  // Método para actualizar el mapa de asientos
+  actualizarMapaAsientos(documentId: string, mapaAsientos: any[]): Observable<any> {
+    return this.http.put(`${this.apiURL}horario-de-autobuses/${documentId}`, {
+      data: {
+        mapaDeAsientos: mapaAsientos
+      }
+    });
+  }
+  
+  getEncomiendasByDni(dni: string): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(
+      `${this.apiURL}encomiendas?filters[$or][0][documentoEmisor][$eq]=${dni}&filters[$or][1][documentoReceptor][$eq]=${dni}`
+    );
+  }
+
 }
