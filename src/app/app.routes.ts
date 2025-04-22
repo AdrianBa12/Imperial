@@ -14,11 +14,12 @@ export const routes: Routes = [
   // { path: 'buscar', component: BusquedaBusesComponent },
   // { path: 'seleccion-asientos', component: SeleccionAsientosComponent },
 
-  { path: '', redirectTo: 'search', pathMatch: 'full' },
-  { path: 'search', component: LandingComponent },
+  { path: '', component: LandingComponent },  // Ruta base muestra LandingComponent
+  { path: 'search', component: LandingComponent },  // Mantener compatibilidad
   { path: 'booking/:id', component: BookingComponent },
   { path: 'schedule', component: ScheduleComponent },
   { path: 'bookings', component: BookingsComponent },
   { path: 'incidencias', component: IncidenciasComponent },
   { path: 'encomienda', component: EncomiendaComponent },
+  { path: '**', redirectTo: '' }  // Catch-all para rutas no encontradas
 ];
